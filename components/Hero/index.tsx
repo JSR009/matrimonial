@@ -178,6 +178,132 @@
 
 
 
+// "use client";
+// import Image from "next/image";
+// import { useState } from "react";
+
+// const Hero = () => {
+//   const [email, setEmail] = useState("");
+
+//   const handleSubmit = (e: { preventDefault: () => void; }) => {
+//     e.preventDefault();
+//     // Handle email submission (add functionality as required)
+//   };
+
+//   return (
+//     <section className=" py-10 px-4 md:py-8 bg-white text-gray-800 z-0">
+//       {/* Adding Top Padding to Avoid Overlapping with Header */}
+//       <div className="mx-auto max-w-7xl grid grid-cols-12 gap-8 pt-16 md:pt-20">
+//         {/* Left Section - Text & Form */}
+//         <div className="col-span-12 lg:col-span-5 flex flex-col justify-center space-y-6">
+//           <h4 className="text-lg font-medium tracking-widest text-gray-500">
+//             🔥 The Perfect Matrimonial Platform
+//           </h4>
+//           <h1 className="text-4xl font-extrabold leading-snug md:text-5xl xl:text-6xl">
+//             Find Your{" "}
+//             <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-600 to-gray-900">
+//               Life Partner
+//             </span>{" "}
+//             with Ease
+//           </h1>
+//           <p className="leading-relaxed text-gray-500">
+//             Discover meaningful connections with a platform that values trust,
+//             privacy, and genuine relationships. Join us today for a journey
+//             towards love.
+//           </p>
+
+//           {/* Form */}
+//           <form
+//             onSubmit={handleSubmit}
+//             className="flex flex-col md:flex-row gap-4"
+//           >
+//             <input
+//               value={email}
+//               onChange={(e) => setEmail(e.target.value)}
+//               type="email"
+//               placeholder="Enter your email"
+//               className="flex-grow rounded-lg px-4 py-3 border-2 border-gray-300 focus:border-gray-900 transition duration-300"
+//             />
+//             <button
+//               type="submit"
+//               className="bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition duration-300"
+//             >
+//               Get Started
+//             </button>
+//           </form>
+//         </div>
+
+//         {/* Right Section - Staggered Grid Images with Animations */}
+//         <div className="col-span-12 lg:col-span-7 grid grid-cols-3 grid-rows-4 gap-4 relative">
+//           {/* Image 1 (Large) */}
+//           <div className="relative row-span-2 col-span-2 transform hover:scale-110 hover:rotate-1 transition-all duration-500 ease-in-out">
+//             <Image
+//               src="/images/hero07.jpg"
+//               alt="Main Hero Image"
+//               layout="fill"
+//               className="object-cover rounded-lg shadow-xl"
+//             />
+//           </div>
+
+//           {/* Image 2 (Tall Image) */}
+//           <div className="relative row-span-3 col-span-1 transform hover:scale-105 transition-all duration-500 ease-in-out">
+//             <Image
+//               src="/images/hero03.jpg"
+//               alt="Tall Image"
+//               layout="fill"
+//               className="object-cover rounded-lg shadow-md"
+//             />
+//           </div>
+
+//           {/* Image 3 (Wide Image) */}
+//           <div className="relative row-span-1 col-span-2 transform hover:scale-105 transition-all duration-500 ease-in-out">
+//             <Image
+//               src="/images/hero04.jpg"
+//               alt="Wide Image"
+//               layout="fill"
+//               className="object-cover rounded-lg shadow-md"
+//             />
+//           </div>
+
+//           {/* Image 4 (Small Square) */}
+//           {/* <div className="relative row-span-1 col-span-1 transform hover:scale-105 hover:rotate-3 transition-all duration-500 ease-in-out">
+//             <Image
+//               src="https://source.unsplash.com/400x400/?wedding,engagement"
+//               alt="Small Square Image"
+//               layout="fill"
+//               className="object-cover rounded-lg shadow-lg"
+//             />
+//           </div> */}
+
+//           {/* Image 5 (Large Tall Image) */}
+//           <div className="relative row-span-2 col-span-2 transform hover:scale-110 hover:rotate-3 transition-all duration-500 ease-in-out">
+//             <Image
+//               src="/images/hero02.jpg"
+//               alt="Large Tall Image"
+//               layout="fill"
+//               className="object-cover rounded-lg shadow-xl"
+//             />
+//           </div>
+
+//           {/* Central Rotating Image */}
+//           <div className="relative row-span-2 col-span-1 transform hover:rotate-6 transition-all duration-500 ease-in-out">
+//             <Image
+//               src="/images/hero05.jpg"
+//               alt="Central Rotating Image"
+//               layout="fill"
+//               className="object-cover rounded-lg shadow-2xl"
+//             />
+//           </div>
+//         </div>
+//       </div>
+//     </section>
+//   );
+// };
+
+// export default Hero;
+
+
+
 "use client";
 import Image from "next/image";
 import { useState } from "react";
@@ -185,114 +311,170 @@ import { useState } from "react";
 const Hero = () => {
   const [email, setEmail] = useState("");
 
-  const handleSubmit = (e: { preventDefault: () => void; }) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     // Handle email submission (add functionality as required)
   };
 
   return (
-    <section className=" py-10 px-4 md:py-8 bg-white text-gray-800 z-0">
-      {/* Adding Top Padding to Avoid Overlapping with Header */}
-      <div className="mx-auto max-w-7xl grid grid-cols-12 gap-8 pt-16 md:pt-20">
+    <section className="py-10 px-4 md:py-8 bg-white text-gray-800 z-0">
+      {/* Hero Container */}
+      <div className="mx-auto max-w-7xl pt-16 md:pt-20">
         {/* Left Section - Text & Form */}
-        <div className="col-span-12 lg:col-span-5 flex flex-col justify-center space-y-6">
-          <h4 className="text-lg font-medium tracking-widest text-gray-500">
-            🔥 The Perfect Matrimonial Platform
-          </h4>
-          <h1 className="text-4xl font-extrabold leading-snug md:text-5xl xl:text-6xl">
-            Find Your{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-600 to-gray-900">
-              Life Partner
-            </span>{" "}
-            with Ease
-          </h1>
-          <p className="leading-relaxed text-gray-500">
-            Discover meaningful connections with a platform that values trust,
-            privacy, and genuine relationships. Join us today for a journey
-            towards love.
-          </p>
+        <div className="grid grid-cols-12 gap-8">
+          <div className="col-span-12 lg:col-span-5 flex flex-col justify-center space-y-6">
+            <h4 className="text-lg font-medium tracking-widest text-gray-500">
+              🔥 The Perfect Matrimonial Platform
+            </h4>
+            <h1 className="text-4xl font-extrabold leading-snug md:text-5xl xl:text-6xl">
+              Find Your{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-600 to-gray-900">
+                Life Partner
+              </span>{" "}
+              with Ease
+            </h1>
+            <p className="leading-relaxed text-gray-500">
+              Discover meaningful connections with a platform that values trust,
+              privacy, and genuine relationships. Join us today for a journey
+              towards love.
+            </p>
 
-          {/* Form */}
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col md:flex-row gap-4"
-          >
-            <input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              type="email"
-              placeholder="Enter your email"
-              className="flex-grow rounded-lg px-4 py-3 border-2 border-gray-300 focus:border-gray-900 transition duration-300"
-            />
-            <button
-              type="submit"
-              className="bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition duration-300"
+            {/* Email Form */}
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col md:flex-row gap-4"
             >
-              Get Started
-            </button>
-          </form>
-        </div>
-
-        {/* Right Section - Staggered Grid Images with Animations */}
-        <div className="col-span-12 lg:col-span-7 grid grid-cols-3 grid-rows-4 gap-4 relative">
-          {/* Image 1 (Large) */}
-          <div className="relative row-span-2 col-span-2 transform hover:scale-110 hover:rotate-1 transition-all duration-500 ease-in-out">
-            <Image
-              src="/images/hero07.jpg"
-              alt="Main Hero Image"
-              layout="fill"
-              className="object-cover rounded-lg shadow-xl"
-            />
+              <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                placeholder="Enter your email"
+                className="flex-grow rounded-lg px-4 py-3 border-2 border-gray-300 focus:border-gray-900 transition duration-300"
+              />
+              <button
+                type="submit"
+                className="bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition duration-300"
+              >
+                Get Started
+              </button>
+            </form>
           </div>
 
-          {/* Image 2 (Tall Image) */}
-          <div className="relative row-span-3 col-span-1 transform hover:scale-105 transition-all duration-500 ease-in-out">
-            <Image
-              src="/images/hero03.jpg"
-              alt="Tall Image"
-              layout="fill"
-              className="object-cover rounded-lg shadow-md"
-            />
-          </div>
+          {/* Right Section - Images */}
+          <div className="col-span-12 lg:col-span-7">
+            {/* New Theme for Small Devices */}
+            <div className="block lg:hidden">
+              {/* Grid for Small Devices */}
+              <div className="grid grid-cols-1 gap-4">
+                {/* Image 1 */}
+                <div className="relative w-full h-64 transform hover:scale-105 transition-all duration-500 ease-in-out">
+                  <Image
+                    src="/images/hero07.jpg"
+                    alt="Main Hero Image"
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-lg shadow-xl"
+                  />
+                </div>
+                {/* Image 2 */}
+                <div className="relative w-full h-64 transform hover:scale-105 transition-all duration-500 ease-in-out">
+                  <Image
+                    src="/images/hero05.jpg"
+                    alt="Tall Image"
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-lg shadow-md"
+                  />
+                </div>
+                {/* Image 3 */}
+                <div className="relative w-full h-64 transform hover:scale-105 transition-all duration-500 ease-in-out">
+                  <Image
+                    src="/images/hero04.jpg"
+                    alt="Wide Image"
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-lg shadow-md"
+                  />
+                </div>
+                {/* Image 4 */}
+                <div className="relative w-full h-64 transform hover:scale-105 transition-all duration-500 ease-in-out">
+                  <Image
+                    src="/images/hero02.jpg"
+                    alt="Large Tall Image"
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-lg shadow-xl"
+                  />
+                </div>
+                {/* Image 5 */}
+                <div className="relative w-full h-64 transform hover:rotate-6 transition-all duration-500 ease-in-out">
+                  <Image
+                    src="/images/hero05.jpg"
+                    alt="Central Rotating Image"
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-lg shadow-2xl"
+                  />
+                </div>
+              </div>
+            </div>
 
-          {/* Image 3 (Wide Image) */}
-          <div className="relative row-span-1 col-span-2 transform hover:scale-105 transition-all duration-500 ease-in-out">
-            <Image
-              src="/images/hero04.jpg"
-              alt="Wide Image"
-              layout="fill"
-              className="object-cover rounded-lg shadow-md"
-            />
-          </div>
-
-          {/* Image 4 (Small Square) */}
-          {/* <div className="relative row-span-1 col-span-1 transform hover:scale-105 hover:rotate-3 transition-all duration-500 ease-in-out">
-            <Image
-              src="https://source.unsplash.com/400x400/?wedding,engagement"
-              alt="Small Square Image"
-              layout="fill"
-              className="object-cover rounded-lg shadow-lg"
-            />
-          </div> */}
-
-          {/* Image 5 (Large Tall Image) */}
-          <div className="relative row-span-2 col-span-2 transform hover:scale-110 hover:rotate-3 transition-all duration-500 ease-in-out">
-            <Image
-              src="/images/hero02.jpg"
-              alt="Large Tall Image"
-              layout="fill"
-              className="object-cover rounded-lg shadow-xl"
-            />
-          </div>
-
-          {/* Central Rotating Image */}
-          <div className="relative row-span-2 col-span-1 transform hover:rotate-6 transition-all duration-500 ease-in-out">
-            <Image
-              src="/images/hero05.jpg"
-              alt="Central Rotating Image"
-              layout="fill"
-              className="object-cover rounded-lg shadow-2xl"
-            />
+            {/* Previous Theme for Large Devices */}
+            <div className="hidden lg:block">
+              {/* Grid for Large Devices */}
+              <div className="grid grid-cols-12 grid-rows-6 gap-4 relative">
+                {/* Image 1 */}
+                <div className="relative row-span-12 col-span-6 transform hover:scale-110 transition-all duration-500 ease-in-out">
+                  <Image
+                    src="/images/hero07.jpg"
+                    alt="Main Hero Image"
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-lg shadow-xl"
+                  />
+                </div>
+                {/* Image 2 */}
+                <div className="relative row-span-12 col-span-3 transform hover:scale-105 transition-all duration-500 ease-in-out">
+                  <Image
+                    src="/images/hero05.jpg"
+                    alt="Tall Image"
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-lg shadow-md"
+                  />
+                </div>
+                {/* Image 3 */}
+                <div className="relative row-span-12 col-span-2 transform hover:scale-105 transition-all duration-500 ease-in-out">
+                  <Image
+                    src="/images/hero04.jpg"
+                    alt="Wide Image"
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-lg shadow-md"
+                  />
+                </div>
+                {/* Image 4 */}
+                <div className="relative row-span-12 col-span-6 transform hover:scale-110 transition-all duration-500 ease-in-out">
+                  <Image
+                    src="/images/hero02.jpg"
+                    alt="Large Tall Image"
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-lg shadow-xl"
+                  />
+                </div>
+                {/* Image 5 */}
+                <div className="relative row-span-12 col-span-6 transform hover:rotate-6 transition-all duration-500 ease-in-out">
+                  <Image
+                    src="/images/hero05.jpg"
+                    alt="Central Rotating Image"
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-lg shadow-2xl"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -301,6 +483,5 @@ const Hero = () => {
 };
 
 export default Hero;
-
 
 

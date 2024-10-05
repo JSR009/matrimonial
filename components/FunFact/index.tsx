@@ -12,14 +12,14 @@ const FunFact = () => {
           <Image
             width={335}
             height={384}
-            src="/images/shape/shape-04.png"
-            alt="Man"
+            src="/images/shape/shape-04.png" // Change this to a relevant image
+            alt="Couple"
             className="absolute -left-15 -top-25 -z-1 lg:left-0"
           />
           <Image
             width={132}
             height={132}
-            src="/images/shape/shape-05.png"
+            src="/images/shape/shape-05.png" // Change this to a relevant image
             alt="Doodle"
             className="absolute bottom-0 right-0 -z-1"
           />
@@ -43,7 +43,6 @@ const FunFact = () => {
                 opacity: 0,
                 y: -20,
               },
-
               visible: {
                 opacity: 1,
                 y: 0,
@@ -56,12 +55,10 @@ const FunFact = () => {
             className="animate_top mx-auto mb-12.5 px-4 text-center md:w-4/5 md:px-0 lg:mb-17.5 lg:w-2/3 xl:w-1/2"
           >
             <h2 className="mb-4 text-3xl font-bold text-black dark:text-white xl:text-sectiontitle3">
-              Trusted by Global Companies.
+              Trusted by Thousands of Couples.
             </h2>
             <p className="mx-auto lg:w-11/12">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. In
-              convallis tortor eros. Donec vitae tortor lacus. Phasellus aliquam
-              ante in maximus.
+              We have successfully matched countless couples, helping them find their life partners through our dedicated services. Join us and take the first step towards a beautiful journey.
             </p>
           </motion.div>
 
@@ -72,7 +69,6 @@ const FunFact = () => {
                   opacity: 0,
                   y: -20,
                 },
-
                 visible: {
                   opacity: 1,
                   y: 0,
@@ -85,9 +81,9 @@ const FunFact = () => {
               className="animate_top text-center"
             >
               <h3 className="mb-2.5 text-3xl font-bold text-black dark:text-white xl:text-sectiontitle3">
-                500K
+                100K+
               </h3>
-              <p className="text-lg lg:text-para2">World Wide Clients</p>
+              <p className="text-lg lg:text-para2">Happy Matches</p>
             </motion.div>
             <motion.div
               variants={{
@@ -95,7 +91,6 @@ const FunFact = () => {
                   opacity: 0,
                   y: -20,
                 },
-
                 visible: {
                   opacity: 1,
                   y: 0,
@@ -108,9 +103,9 @@ const FunFact = () => {
               className="animate_top text-center"
             >
               <h3 className="mb-2.5 text-3xl font-bold text-black dark:text-white xl:text-sectiontitle3">
-                1M+
+                250K+
               </h3>
-              <p className="text-lg lg:text-para2">Downloads</p>
+              <p className="text-lg lg:text-para2">Profiles Registered</p>
             </motion.div>
             <motion.div
               variants={{
@@ -118,7 +113,6 @@ const FunFact = () => {
                   opacity: 0,
                   y: -20,
                 },
-
                 visible: {
                   opacity: 1,
                   y: 0,
@@ -131,9 +125,9 @@ const FunFact = () => {
               className="animate_top text-center"
             >
               <h3 className="mb-2.5 text-3xl font-bold text-black dark:text-white xl:text-sectiontitle3">
-                865
+                500+
               </h3>
-              <p className="text-lg lg:text-para2">Winning Award</p>
+              <p className="text-lg lg:text-para2">Success Stories</p>
             </motion.div>
           </div>
         </div>
