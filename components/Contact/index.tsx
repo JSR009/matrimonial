@@ -1092,7 +1092,9 @@ const Contact: React.FC = () => {
                   <FaMapMarkerAlt className="inline-block mr-2 text-blue-600" /> Our Location
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400">
-                  290 Maryam Springs 260, Courbevoie, Paris, France
+                Office no. 217 2nd floor, jain tower 1, District Center, Janakpuri, New Delhi 110058
+
+Timing: Monday to Saturday: 10 AM - 6 PM (Closed on govt. holiday)
                 </p>
               </div>
 
@@ -1112,8 +1114,8 @@ const Contact: React.FC = () => {
                   <FaPhoneAlt className="inline-block mr-2 text-blue-600" /> Phone Number
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400">
-                  <a href="tel:+009423346343843" className="hover:text-blue-500">
-                    +009 42334 6343 843
+                  <a href="011-49054121" className="hover:text-blue-500">
+                  011-49054121
                   </a>
                 </p>
               </div>
