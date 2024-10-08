@@ -3,13 +3,26 @@ import { useEffect, useState } from "react";
 import { db } from "@/firebaseConfig";
 import { collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
 
+// Define the Contact type
+interface Contact {
+  id?: string; // id may be optional when creating a new contact
+  fullName: string;
+  email: string;
+  age: number; // Change to number for type safety
+  phoneNumber: string;
+  city: string;
+  gender: string;
+  message?: string; // Message can be optional
+  maritalStatus: string;
+}
+
 const Dashboard: React.FC = () => {
-  const [contacts, setContacts] = useState<any[]>([]);
+  const [contacts, setContacts] = useState<Contact[]>([]); // Use the Contact type
   const [loading, setLoading] = useState<boolean>(true);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<Contact>({
     fullName: "",
     email: "",
-    age: "",
+    age: 0, // Default to a number
     phoneNumber: "",
     city: "",
     gender: "",
@@ -21,7 +34,7 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "matrimonialContacts"), (snapshot) => {
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Contact[]; // Assert to Contact type
       setContacts(data);
       setLoading(false);
     });
@@ -33,7 +46,7 @@ const Dashboard: React.FC = () => {
   // Handle form input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [name]: name === "age" ? Number(value) : value })); // Convert age to number
   };
 
   // Add new contact to Firestore
@@ -50,7 +63,7 @@ const Dashboard: React.FC = () => {
     setFormData({
       fullName: "",
       email: "",
-      age: "",
+      age: 0, // Reset to a number
       phoneNumber: "",
       city: "",
       gender: "",
@@ -68,7 +81,7 @@ const Dashboard: React.FC = () => {
   };
 
   // Set a contact to edit
-  const handleEdit = (contact: any) => {
+  const handleEdit = (contact: Contact) => { // Use Contact type
     setEditingId(contact.id);
     setFormData({
       fullName: contact.fullName,
@@ -77,7 +90,7 @@ const Dashboard: React.FC = () => {
       phoneNumber: contact.phoneNumber,
       city: contact.city,
       gender: contact.gender,
-      message: contact.message,
+      message: contact.message || "", // Default to empty string if undefined
       maritalStatus: contact.maritalStatus,
     });
     setShowForm(true); // Show form when editing
@@ -231,13 +244,13 @@ const Dashboard: React.FC = () => {
                   <div className="flex">
                     <button
                       className="bg-yellow-500 text-white px-2 py-1 rounded mr-2 hover:bg-yellow-600"
-                      onClick={() => handleEdit(contact)}
+                      onClick={() => handleEdit(contact)} // Use Contact type
                     >
                       Edit
                     </button>
                     <button
                       className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                      onClick={() => handleDelete(contact.id)}
+                      onClick={() => handleDelete(contact.id!)} // Use non-null assertion
                     >
                       Delete
                     </button>
