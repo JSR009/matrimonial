@@ -18,7 +18,7 @@ export default function AstrologyLandingPage() {
       <section className="relative bg-gradient-to-br from-purple-500 to-indigo-700 text-white py-20 px-4 flex items-center justify-center" onClick={handleSectionClick}>
         <div className="text-center max-w-3xl cursor-pointer">
           <h1 className="text-4xl sm:text-5xl font-bold mb-6">Unlock Your Cosmic Journey</h1>
-          <p className="text-lg sm:text-xl mb-8">Discover the ancient wisdom of the stars with personalized astrology readings designed to guide your life's path.</p>
+          <p className="text-lg sm:text-xl mb-8">Discover the ancient wisdom of the stars with personalized astrology readings designed to guide your life&apos;s path.</p>
           <button className="bg-white text-indigo-700 py-3 px-6 rounded-full font-semibold hover:bg-gray-200 transition">Explore Now</button>
         </div>
         <Image src="/images/stars-bg.jpg" alt="Astrology background" layout="fill" objectFit="cover" className="opacity-30" />
@@ -30,7 +30,7 @@ export default function AstrologyLandingPage() {
           <div>
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-6">About Us</h2>
             <p className="text-lg text-gray-600 mb-6">
-              We are a team of experienced astrologers who use the wisdom of the cosmos to guide you on your life's journey. With decades of combined experience, we offer personalized readings that provide insights into your life's challenges, opportunities, and destiny.
+              We are a team of experienced astrologers who use the wisdom of the cosmos to guide you on your life&apos;s journey. With decades of combined experience, we offer personalized readings that provide insights into your life&apos;s challenges, opportunities, and destiny.
             </p>
             <button className="bg-indigo-700 text-white py-3 px-6 rounded-lg font-semibold hover:bg-indigo-800 transition">Learn More</button>
           </div>
@@ -44,7 +44,7 @@ export default function AstrologyLandingPage() {
       <section id="services" className="py-20 bg-gray-50 px-4" onClick={handleSectionClick}>
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-800">Astrology Services</h2>
-          <p className="text-lg text-gray-600 mt-4">Explore our range of astrology services designed to guide you through life's challenges and opportunities.</p>
+          <p className="text-lg text-gray-600 mt-4">Explore our range of astrology services designed to guide you through life&apos;s challenges and opportunities.</p>
         </div>
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Service 1 */}
@@ -57,7 +57,7 @@ export default function AstrologyLandingPage() {
           <div className="bg-white p-6 shadow-md rounded-lg hover:shadow-xl transition">
             <Image src="/images/Hand.jpg" alt="Horoscope Matching" width={600} height={300} className="rounded-lg mb-4" />
             <h3 className="text-xl font-semibold mb-4 text-indigo-700">Horoscope Matching</h3>
-            <p className="text-gray-600">Find out if you're cosmically aligned with your partner through horoscope matching.</p>
+            <p className="text-gray-600">Find out if you&apos;re cosmically aligned with your partner through horoscope matching.</p>
           </div>
           {/* Service 3 */}
           <div className="bg-white p-6 shadow-md rounded-lg hover:shadow-xl transition">
