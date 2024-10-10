@@ -3,30 +3,29 @@ import { useEffect, useState } from "react";
 import { db } from "@/firebaseConfig";
 import { collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
 
-// Define the Contact type
 interface Contact {
-  id?: string; // id may be optional when creating a new contact
+  id?: string;
   fullName: string;
   email: string;
-  age: number; // Change to number for type safety
+  age: number;
   phoneNumber: string;
   city: string;
   gender: string;
-  message?: string; // Message can be optional
+  message?: string; // Optional property
   maritalStatus: string;
 }
 
 const Dashboard: React.FC = () => {
-  const [contacts, setContacts] = useState<Contact[]>([]); // Use the Contact type
+  const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [formData, setFormData] = useState<Contact>({
     fullName: "",
     email: "",
-    age: 0, // Default to a number
+    age: 0,
     phoneNumber: "",
     city: "",
     gender: "",
-    message: "",
+    message: "", // Initialize as an empty string
     maritalStatus: "",
   });
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -34,55 +33,74 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "matrimonialContacts"), (snapshot) => {
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Contact[]; // Assert to Contact type
+      const data = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Contact[];
       setContacts(data);
       setLoading(false);
     });
 
-    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);
 
-  // Handle form input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: name === "age" ? Number(value) : value })); // Convert age to number
+    setFormData(prev => ({
+      ...prev,
+      [name]: name === "age" ? Number(value) : value,
+    }));
   };
 
-  // Add new contact to Firestore
   const handleAddContact = async () => {
-    if (editingId) {
-      // Update existing contact
-      const contactRef = doc(db, "matrimonialContacts", editingId);
-      await updateDoc(contactRef, formData);
-      setEditingId(null);
-    } else {
-      // Add new contact
-      await addDoc(collection(db, "matrimonialContacts"), formData);
+    try {
+      // Create a Firestore-compatible object
+      const firestoreData = {
+        fullName: formData.fullName,
+        email: formData.email,
+        age: formData.age,
+        phoneNumber: formData.phoneNumber,
+        city: formData.city,
+        gender: formData.gender,
+        message: formData.message || "", // Provide default value for optional fields
+        maritalStatus: formData.maritalStatus,
+      };
+
+      if (editingId) {
+        const contactRef = doc(db, "matrimonialContacts", editingId);
+        await updateDoc(contactRef, firestoreData);
+        setEditingId(null);
+      } else {
+        await addDoc(collection(db, "matrimonialContacts"), firestoreData);
+      }
+
+      // Reset form data after successful submission
+      setFormData({
+        fullName: "",
+        email: "",
+        age: 0,
+        phoneNumber: "",
+        city: "",
+        gender: "",
+        message: "", // Reset message as well
+        maritalStatus: "",
+      });
+
+      setShowForm(false);
+    } catch (error) {
+      console.error("Error adding/updating contact:", error);
     }
-    setFormData({
-      fullName: "",
-      email: "",
-      age: 0, // Reset to a number
-      phoneNumber: "",
-      city: "",
-      gender: "",
-      message: "",
-      maritalStatus: "",
-    });
-    setShowForm(false); // Hide form after submission
   };
 
-  // Delete a contact from Firestore
-  const handleDelete = async (id: string) => {
-    const contactRef = doc(db, "matrimonialContacts", id);
-    await deleteDoc(contactRef);
-    // No need to manually update contacts, Firestore onSnapshot will handle it
+  const handleDelete = async (id?: string) => {
+    if (id) {
+      const contactRef = doc(db, "matrimonialContacts", id);
+      await deleteDoc(contactRef);
+    }
   };
 
-  // Set a contact to edit
-  const handleEdit = (contact: Contact) => { // Use Contact type
-    setEditingId(contact.id);
+  const handleEdit = (contact: Contact) => {
+    setEditingId(contact.id || null);
     setFormData({
       fullName: contact.fullName,
       email: contact.email,
@@ -90,32 +108,28 @@ const Dashboard: React.FC = () => {
       phoneNumber: contact.phoneNumber,
       city: contact.city,
       gender: contact.gender,
-      message: contact.message || "", // Default to empty string if undefined
+      message: contact.message || "", // Handle optional property
       maritalStatus: contact.maritalStatus,
     });
-    setShowForm(true); // Show form when editing
+    setShowForm(true);
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="px-4 py-10">
       <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
 
-      {/* Button to show form */}
       <button
         className="mb-6 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
         onClick={() => {
           setShowForm(true);
-          setEditingId(null); // Clear edit state if adding new user
+          setEditingId(null);
         }}
       >
         Add User
       </button>
 
-      {/* Form for adding or updating contact */}
       {showForm && (
         <div className="mb-6">
           <h2 className="text-2xl mb-4">{editingId ? "Edit Contact" : "Add New Contact"}</h2>
@@ -213,7 +227,6 @@ const Dashboard: React.FC = () => {
         </div>
       )}
 
-      {/* Contacts Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
           <thead className="bg-gray-800 text-white">
@@ -244,13 +257,13 @@ const Dashboard: React.FC = () => {
                   <div className="flex">
                     <button
                       className="bg-yellow-500 text-white px-2 py-1 rounded mr-2 hover:bg-yellow-600"
-                      onClick={() => handleEdit(contact)} // Use Contact type
+                      onClick={() => handleEdit(contact)}
                     >
                       Edit
                     </button>
                     <button
                       className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                      onClick={() => handleDelete(contact.id!)} // Use non-null assertion
+                      onClick={() => handleDelete(contact.id)}
                     >
                       Delete
                     </button>
