@@ -55,12 +55,12 @@ const Hero = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 type="email"
                 placeholder="Enter your email"
-                className="flex-grow rounded-lg px-4 py-3 border-2 border-gray-300 focus:border-gray-900 transition duration-300"
+                className="flex-grow rounded-lg px-4 py-5 border-2 border-gray-300 focus:border-gray-900 transition duration-300"
                 required
               />
               <button
                 type="submit"
-                className="bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition duration-300 p-3"
+                className="bg-gray-900 text-white px-6 py-5 rounded-lg hover:bg-gray-700 transition duration-300 p-3"
               >
                 Get Started
               </button>
