@@ -6,7 +6,7 @@ const FeaturesTab = () => {
   return (
     <>
       {/* <!-- ===== Hero Section Start ===== --> */}
-      <section className="relative py-20 lg:py-32 bg-gradient-to-b from-purple-600 to-blue-400 text-white">
+      <section className="relative py-20 lg:py-32 bg-gradient-to-b from-purple-600 to-blue-400 text-white m-5">
         <div className="relative mx-auto max-w-c-1390 px-4 md:px-8 2xl:px-0">
           {/* Background Image */}
           <div className="absolute inset-0 -z-10">
