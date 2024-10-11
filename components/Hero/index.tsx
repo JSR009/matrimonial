@@ -26,7 +26,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="py-10 px-4 md:py-8 bg-white text-gray-800 z-0">
+    <section className="py-10 px-4 md:py-8 bg-white text-gray-800 z-0 sm:p-4">
       {/* Hero Container */}
       <div className="mx-auto max-w-7xl pt-16 md:pt-20">
         {/* Left Section - Text & Form */}
