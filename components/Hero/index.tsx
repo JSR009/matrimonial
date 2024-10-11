@@ -70,7 +70,7 @@ const Hero = () => {
           </div>
 
           {/* Right Section - Images */}
-          <div className="col-span-12 lg:col-span-7">
+          <div className="col-span-12 lg:col-span-7 p-4">
             {/* New Theme for Small Devices */}
             <div className="block lg:hidden">
               {/* Grid for Small Devices */}
