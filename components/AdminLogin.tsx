@@ -14,7 +14,7 @@ const AdminLogin: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
     e.preventDefault();
 
     // Example email and password validation
-    if (email === "admin@example.com" && password === "admin123") {
+    if (email === "milanmunch01@gmail.com" && password === "$Milanmunch@1515$") {
       // Set the cookie to indicate admin access
       Cookies.set('isAdmin', 'true', { expires: 1 }); // Expires in 1 day
       onLogin(); // Call onLogin to update the parent component state
