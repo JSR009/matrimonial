@@ -49,7 +49,7 @@ const Hero = () => {
             </p>
 
             {/* Email Form */}
-            <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4">
+            <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4 p-4">
               <input
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -60,7 +60,7 @@ const Hero = () => {
               />
               <button
                 type="submit"
-                className="bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition duration-300"
+                className="bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition duration-300 p-4"
               >
                 Get Started
               </button>
