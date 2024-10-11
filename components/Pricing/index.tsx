@@ -25,23 +25,23 @@ const Pricing = () => {
           <div className="flex flex-wrap justify-center gap-10 lg:flex-nowrap xl:gap-14">
             {/* Pricing Comparison Item - Other Websites */}
             <div className="animate_top group relative rounded-lg border border-stroke bg-white p-10 shadow-lg dark:border-strokedark dark:bg-blacksection dark:shadow-none md:w-[45%] lg:w-1/2 xl:p-12">
-              <h3 className="mb-7 text-3xl font-bold text-gray-700 dark:text-white">
+              <h3 className="mb-7 text-3xl font-bold text-black-700 dark:text-white">
                 Other Matrimonial Sites
               </h3>
               <ul className="space-y-4">
-                <li className="flex items-center gap-4 text-lg text-gray-600 dark:text-gray-300">
+                <li className="flex items-center gap-4 text-lg text-black-600 dark:text-black-300">
                   <FaTimesCircle className="text-red-500" />
                   Limited Search Filters
                 </li>
-                <li className="flex items-center gap-4 text-lg text-gray-600 dark:text-gray-300">
+                <li className="flex items-center gap-4 text-lg text-black-600 dark:text-black-300">
                   <FaTimesCircle className="text-red-500" />
                   No Dedicated Customer Support
                 </li>
-                <li className="flex items-center gap-4 text-lg text-gray-600 dark:text-gray-300">
+                <li className="flex items-center gap-4 text-lg text-black-600 dark:text-black-300">
                   <FaTimesCircle className="text-red-500" />
                   Paid Profile Boosting
                 </li>
-                <li className="flex items-center gap-4 text-lg text-gray-600 dark:text-gray-300">
+                <li className="flex items-center gap-4 text-lg text-black-600 dark:text-black-300">
                   <FaTimesCircle className="text-red-500" />
                   No Matchmaking Consultation
                 </li>
@@ -61,19 +61,19 @@ const Pricing = () => {
                 Our Matrimonial Services
               </h3>
               <ul className="space-y-4">
-                <li className="flex items-center gap-4 text-lg text-gray-600 dark:text-gray-300">
+                <li className="flex items-center gap-4 text-lg text-black-600 dark:text-black-300">
                   <FaCheckCircle className="text-green-500" />
                   Advanced Search Filters
                 </li>
-                <li className="flex items-center gap-4 text-lg text-gray-600 dark:text-gray-300">
+                <li className="flex items-center gap-4 text-lg text-black-600 dark:text-black-300">
                   <FaCheckCircle className="text-green-500" />
                   24/7 Dedicated Customer Support
                 </li>
-                <li className="flex items-center gap-4 text-lg text-gray-600 dark:text-gray-300">
+                <li className="flex items-center gap-4 text-lg text-black-600 dark:text-black-300">
                   <FaCheckCircle className="text-green-500" />
                   Free Profile Boosting
                 </li>
-                <li className="flex items-center gap-4 text-lg text-gray-600 dark:text-gray-300">
+                <li className="flex items-center gap-4 text-lg text-black-600 dark:text-black-300">
                   <FaCheckCircle className="text-green-500" />
                   Personalized Matchmaking Consultation
                 </li>
