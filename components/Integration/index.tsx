@@ -7,7 +7,7 @@ const Integration = () => {
   return (
     <>
       <section className="p-4">
-        <div className="mx-auto max-w-c-1390 px-4 md:px-8 2xl:px-0 p-2">
+        <div className="mx-auto max-w-c-1390 px-4 md:px-8 2xl:px-0">
           {/* <!-- Section Title Start --> */}
           <SectionHeader
             headerInfo={{
