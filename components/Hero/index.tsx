@@ -49,7 +49,7 @@ const Hero = () => {
             </p>
 
             {/* Email Form */}
-            <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4">
+            <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-4 p-4">
               <input
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
