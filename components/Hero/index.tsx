@@ -76,7 +76,7 @@ const Hero = () => {
               {/* Grid for Small Devices */}
               <div className="grid grid-cols-1 gap-4">
                 {/* Image 1 */}
-                <div className="relative w-full h-64 transform hover:scale-105 transition-all duration-500 ease-in-out">
+                {/* <div className="relative w-full h-64 transform hover:scale-105 transition-all duration-500 ease-in-out">
                   <Image
                     src="/images/hero07.jpg"
                     alt="Main Hero Image"
@@ -84,7 +84,7 @@ const Hero = () => {
                     objectFit="cover"
                     className="rounded-lg shadow-xl"
                   />
-                </div>
+                </div> */}
                 {/* Image 2 */}
                 <div className="relative w-full h-64 transform hover:scale-105 transition-all duration-500 ease-in-out">
                   <Image
