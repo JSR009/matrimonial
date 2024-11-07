@@ -7,9 +7,10 @@ import Integration from "@/components/Integration";
 import CTA from "@/components/CTA";
 import FAQ from "@/components/FAQ";
 import Pricing from "@/components/Pricing";
-import Contact from "@/components/Contact";
 import Testimonial from "@/components/Testimonial";
 import Header from "@/components/Header";
+// import Register from "@/components/Register";
+import Plans from "@/components/Plans";
 
 export const metadata: Metadata = {
   title: "This is matrimonial website",
@@ -30,7 +31,9 @@ export default function Home() {
       <FAQ />
       <Testimonial />
       <Pricing />
-      <Contact />
+      {/* <Contact /> */}
+      {/* <Register /> */}
+      <Plans />
     </main>
   );
 }

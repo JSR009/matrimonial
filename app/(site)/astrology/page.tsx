@@ -1,5 +1,6 @@
 "use client";
 
+import Contact from '@/components/Contact';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -13,7 +14,7 @@ export default function AstrologyLandingPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col mt-8">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-purple-500 to-indigo-700 text-white py-20 px-4 flex items-center justify-center" onClick={handleSectionClick}>
         <div className="text-center max-w-3xl cursor-pointer">
@@ -102,6 +103,7 @@ export default function AstrologyLandingPage() {
           <button className="bg-indigo-700 text-white py-3 px-6 rounded-full font-semibold hover:bg-indigo-800 transition">Book a Reading</button>
         </div>
       </section>
+      <Contact />
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-8">

@@ -1,21 +1,22 @@
-// middleware.ts
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  // Check for the admin in cookies
-//   const isAdmin = request.cookies.has('isAdmin') && request.cookies.get('isAdmin') === 'true';
+  const token = request.cookies.get("token")?.value;
 
-  // If the request is for the Dashboard and the user is not an admin
-  if (request.nextUrl.pathname === '/dashboard') {
-    return NextResponse.redirect(new URL('/admin', request.url));
+  // List all routes that require authentication
+  const protectedRoutes = ["/profile", '/dashboard'];
+
+  // Redirect to login if token is missing
+  if (protectedRoutes.includes(request.nextUrl.pathname) && !token) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  
   }
 
-  // Allow the request to continue
   return NextResponse.next();
 }
 
-// Specify which routes this middleware should run on
+// Apply middleware to the protected routes only
 export const config = {
-  matcher: ['/dashboard'], // Only apply middleware to the dashboard route
+  matcher: ["/profile"],
 };
