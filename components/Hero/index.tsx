@@ -32,7 +32,7 @@ const Hero = () => {
         {/* Buttons */}
         <div className="mt-4 flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 justify-center">
           <button className="bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition">
-            <Link href="/regiser">
+            <Link href="/register">
             Register
             </Link>
             

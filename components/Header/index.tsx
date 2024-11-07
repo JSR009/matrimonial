@@ -45,7 +45,7 @@ function Header() {
         <div className="flex justify-between items-center p-4 md:px-8">
           {/* LOGO */}
           <Link href="/" className="text-2xl text-cyan-600 font-bold">
-            <Image src="/images/logo2.jpeg" alt="logo" height={60} width={60} />
+            <Image src="/images/logo3.jpeg" alt="logo" height={60} width={60} />
           </Link>
 
           {/* HAMBURGER BUTTON FOR MOBILE */}

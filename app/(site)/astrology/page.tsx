@@ -19,7 +19,7 @@ export default function AstrologyLandingPage() {
       <section className="relative bg-gradient-to-br from-purple-500 to-indigo-700 text-white py-20 px-4 flex items-center justify-center" onClick={handleSectionClick}>
         <div className="text-center max-w-3xl cursor-pointer">
           <h1 className="text-4xl sm:text-5xl font-bold mb-6">Unlock Your Cosmic Journey</h1>
-          <p className="text-lg sm:text-xl mb-8">Discover the ancient wisdom of the stars with personalized astrology readings designed to guide your life&apos;s path.</p>
+          <p className="text-lg sm:text-xl mb-8">Discover the ancient wisdom of the stars with personalized numerology readings designed to guide your life&apos;s path.</p>
           <button className="bg-white text-indigo-700 py-3 px-6 rounded-full font-semibold hover:bg-gray-200 transition">Explore Now</button>
         </div>
         <Image src="/images/stars-bg.jpg" alt="Astrology background" layout="fill" objectFit="cover" className="opacity-30" />
