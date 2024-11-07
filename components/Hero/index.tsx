@@ -2,6 +2,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 const Hero = () => {
   return (
@@ -31,10 +32,15 @@ const Hero = () => {
         {/* Buttons */}
         <div className="mt-4 flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 justify-center">
           <button className="bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition">
+            <Link href="/regiser">
             Register
+            </Link>
+            
           </button>
           <button className="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition">
-            Login
+           <Link href="/login">
+           Login
+           </Link>
           </button>
         </div>
       </div>

@@ -231,12 +231,13 @@ const Profile = () => {
       <div className="bg-gradient-to-r from-purple-400 to-blue-500 p-8 rounded-lg shadow-lg text-white flex items-center justify-center flex-col">
         <div className="relative w-40 h-40 mb-4">
         <Image
-            src={user?.portfolioImages[0] || "/images/default-profile.png"} // Corrected this line
+            src={user?.portfolioImages[0] || "/images/default-profile.png"}
             alt="Profile"
-            className="rounded-full w-full h-full object-cover border-4 border-white shadow-lg"
+            className="rounded-full w-24 h-24 sm:w-full sm:h-full object-cover border-4 border-white shadow-lg"
             width={100}
             height={100}
           />
+
           <label className="absolute bottom-2 right-2 p-1 bg-white text-gray-700 rounded-full cursor-pointer">
             <FaCamera />
             <input type="file" onChange={(e) => e.target.files && handleImageUpload(e.target.files[0], `profileImages/${user.email}`, "profileImage")} hidden />
@@ -294,7 +295,7 @@ const Profile = () => {
         <div className="flex space-x-4 mt-4">
           {user.portfolioImages.map((src, index) => (
             <div key={index} className="relative">
-              <Image src={src} alt={`Portfolio ${index + 1}`} width={100} height={100} className="rounded-md shadow-md" />
+              <Image src={src} alt={`Portfolio ${index + 1}`} width={100} height={100} className="w-24 h-24 sm:w-full sm:h-full object-cover border-4 rounded-md shadow-md" />
               <button className="absolute top-1 right-1 text-red-600" onClick={() => removePortfolioImage(src)}>
                 <FaTrash />
               </button>
