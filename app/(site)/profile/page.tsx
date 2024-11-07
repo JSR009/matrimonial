@@ -8,7 +8,7 @@ import Image from "next/image";
 import { db, storage } from "@/firebaseConfig";
 import {  collection, query, where, getDocs } from "firebase/firestore";
 import { uploadBytes, ref, getDownloadURL, deleteObject } from "firebase/storage";
-import EditProfileModal from "@/components/EditProfileModal";
+
 
 
 type User = {
@@ -40,9 +40,8 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(true);
   const [visibleContacts, setVisibleContacts] = useState<{ [key: string]: boolean }>({});
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [userDataForEdit, setUserDataForEdit] = useState({});
-  const [successMessage, setSuccessMessage] = useState("");
+
+
 
   const profileFields: { label: string; key: keyof User }[] = [
     { label: "Date of Birth", key: "dob" },
@@ -131,25 +130,19 @@ const Profile = () => {
 
   const handleEditClick = () => {
     if (user) {
-      setUserDataForEdit(user);
-      setIsModalOpen(true);
+      
     } else {
       console.error("User data is missing.");
     }
   };
   
   // Update form data in the modal
-  const handleInputChange = (key:any, value:any) => {
-    setUserDataForEdit((prev) => ({ ...prev, [key]: value }));
-  };
+ 
 
   // Save changes to Firebase
   const handleSaveChanges = async () => {
     try {
-      // Add Firebase update logic here, like your `fetch` API call to update data
       
-      setIsModalOpen(false); // Close modal on success
-      setSuccessMessage("Your information has been successfully updated."); // Show success message
     } catch (error) {
       console.error("Error updating profile:", error);
     }
@@ -233,11 +226,7 @@ const Profile = () => {
 
   return (
     <div className="container mx-auto px-4 py-10 space-y-8 mt-8">
-       {successMessage && (
-        <div className="bg-green-100 text-green-800 p-4 rounded-lg shadow-md mb-4">
-          {successMessage}
-        </div>
-      )}
+       
       {/* Profile Header */}
       <div className="bg-gradient-to-r from-purple-400 to-blue-500 p-8 rounded-lg shadow-lg text-white flex items-center justify-center flex-col">
         <div className="relative w-40 h-40 mb-4">
@@ -263,14 +252,7 @@ const Profile = () => {
       </button>
 
       {/* Render Edit Modal */}
-      <EditProfileModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        userData={userDataForEdit}
-        onChange={handleInputChange}
-        onSave={handleSaveChanges}
-        userId={user}
-      />
+    
       </div>
 
       {/* Profile Details */}

@@ -15,6 +15,7 @@ interface Contact {
   maritalStatus: string;
 }
 
+
 interface User {
   id?: string;
   name: string;
@@ -96,15 +97,22 @@ const AdminDashboard: React.FC = () => {
     try {
       if (editingId) {
         const docRef = doc(db, collectionName, editingId);
-        await updateDoc(docRef, formData as { [x: string]: any });
+        await updateDoc(docRef, { ...formData });
       } else {
-        await addDoc(collection(db, collectionName), formData as { [x: string]: any });
+        const collectionRef = collection(db, collectionName);
+        if (collectionName === "matrimonialContacts" && isContact(formData)) {
+          await addDoc(collectionRef, formData);
+        } else if (collectionName === "users" && !isContact(formData)) {
+          await addDoc(collectionRef, formData);
+        }
       }
       resetForm();
     } catch (error) {
       console.error("Error saving document:", error);
     }
   };
+  
+  
   
   
 

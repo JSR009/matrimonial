@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, memo } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, UseFormRegister } from "react-hook-form";
 import { auth } from "@/firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
@@ -15,6 +15,15 @@ interface LoginFormData {
   password: string;
 }
 
+interface PasswordFieldProps {
+  label: string;
+  name: "email" | "password"; // Ensure name is one of the keys of LoginFormData
+  show: boolean;
+  toggle: () => void;
+  register: UseFormRegister<LoginFormData>;
+  error?: boolean;
+}
+
 const PasswordField = memo(
   ({
     label,
@@ -23,14 +32,7 @@ const PasswordField = memo(
     toggle,
     register,
     error,
-  }: {
-    label: string;
-    name: string;
-    show: boolean;
-    toggle: () => void;
-    register: any;
-    error?: boolean;
-  }) => (
+  }: PasswordFieldProps) => (
     <div className="relative mb-4">
       <label className="block text-gray-700 font-bold mb-2" htmlFor={name}>
         {label}
@@ -53,6 +55,8 @@ const PasswordField = memo(
   )
 );
 
+PasswordField.displayName = "PasswordField"; // Add display name
+
 const SuccessModal = memo(({ onClose }: { onClose: () => void }) => (
   <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
     <div className="bg-white p-6 rounded-md shadow-md text-center">
@@ -67,6 +71,8 @@ const SuccessModal = memo(({ onClose }: { onClose: () => void }) => (
     </div>
   </div>
 ));
+
+SuccessModal.displayName = "SuccessModal"; // Add display name
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>();
@@ -117,7 +123,7 @@ const Login = () => {
           show={showPassword}
           toggle={() => setShowPassword(!showPassword)}
           register={register}
-          error={!!errors.password}  
+          error={!!errors.password}
         />
 
         <button

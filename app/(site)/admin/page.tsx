@@ -16,7 +16,7 @@ const AdminLoginForm = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
-  const handleSubmit = (e:any) => {
+  const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError(''); // Clear previous error

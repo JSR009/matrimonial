@@ -9,6 +9,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FaEye, FaEyeSlash, FaTrash, FaSpinner } from 'react-icons/fa';
+import { UseFormRegister, FieldErrors } from 'react-hook-form';
 import Image from 'next/image';
 
 interface RegistrationFormData {
@@ -37,40 +38,61 @@ interface RegistrationFormData {
   portfolioImages: FileList;
 }
 
-const Field = memo(
-  ({ label, name, type, options, register, required, errors }: any) => (
-    <div className="mb-4">
-      <label className="block text-gray-700 font-bold mb-2" htmlFor={name}>{label}</label>
-      {type === "select" ? (
-        <select id={name} {...register(name, { required })} className="w-full p-2 border rounded">
-          {options.map((option: string) => (
-            <option key={option} value={option}>{option}</option>
-          ))}
-        </select>
-      ) : type === "textarea" ? (
-        <textarea id={name} {...register(name, { required })} className="w-full p-2 border rounded" />
-      ) : (
-        <input id={name} type={type} {...register(name, { required })} className="w-full p-2 border rounded" />
-      )}
-      {errors && errors[name] && <p className="text-red-500 text-xs mt-1">This field is required.</p>}
-    </div>
-  )
-);
+interface FieldProps {
+  label: string;
+  name: keyof RegistrationFormData; // Ensures only valid fields from RegistrationFormData are used
+  type: string;
+  options?: string[];
+  register: UseFormRegister<RegistrationFormData>; // Specific to RegistrationFormData
+  required: boolean;
+  errors: FieldErrors<RegistrationFormData>; // Specific to RegistrationFormData
+}
 
-const PasswordField = memo(
-  ({ label, name, show, toggle, register, errors }: any) => (
-    <div className="relative mb-4">
-      <label className="block text-gray-700 font-bold mb-2" htmlFor={name}>{label}</label>
-      <input type={show ? "text" : "password"} {...register(name, { required: true })} className="w-full p-2 border rounded pr-10" />
-      <div onClick={toggle} className="absolute top-3 right-3 cursor-pointer text-gray-500">
-        {show ? <FaEyeSlash /> : <FaEye />}
-      </div>
-      {errors && errors[name] && <p className="text-red-500 text-xs mt-1">This field is required.</p>}
-    </div>
-  )
-);
+interface PasswordFieldProps {
+  label: string;
+  name: keyof RegistrationFormData; // Ensures only valid fields from RegistrationFormData are used
+  show: boolean;
+  toggle: () => void;
+  register: UseFormRegister<RegistrationFormData>; // Specific to RegistrationFormData
+  errors: FieldErrors<RegistrationFormData>; // Specific to RegistrationFormData
+}
 
-const SuccessModal = memo(({ onClose }: { onClose: () => void }) => (
+interface SuccessModalProps {
+  onClose: () => void;
+}
+
+const Field = memo(({ label, name, type, options, register, required, errors }: FieldProps) => (
+  <div className="mb-4">
+    <label className="block text-gray-700 font-bold mb-2" htmlFor={name}>{label}</label>
+    {type === "select" ? (
+      <select id={name} {...register(name, { required })} className="w-full p-2 border rounded">
+        {options?.map((option) => (
+          <option key={option} value={option}>{option}</option>
+        ))}
+      </select>
+    ) : type === "textarea" ? (
+      <textarea id={name} {...register(name, { required })} className="w-full p-2 border rounded" />
+    ) : (
+      <input id={name} type={type} {...register(name, { required })} className="w-full p-2 border rounded" />
+    )}
+    {errors[name] && <p className="text-red-500 text-xs mt-1">This field is required.</p>}
+  </div>
+));
+Field.displayName = "Field";
+
+const PasswordField = memo(({ label, name, show, toggle, register, errors }: PasswordFieldProps) => (
+  <div className="relative mb-4">
+    <label className="block text-gray-700 font-bold mb-2" htmlFor={name}>{label}</label>
+    <input type={show ? "text" : "password"} {...register(name, { required: true })} className="w-full p-2 border rounded pr-10" />
+    <div onClick={toggle} className="absolute top-3 right-3 cursor-pointer text-gray-500">
+      {show ? <FaEyeSlash /> : <FaEye />}
+    </div>
+    {errors[name] && <p className="text-red-500 text-xs mt-1">This field is required.</p>}
+  </div>
+));
+PasswordField.displayName = "PasswordField";
+
+const SuccessModal = memo(({ onClose }: SuccessModalProps) => (
   <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
     <div className="bg-white p-6 rounded-md shadow-md text-center">
       <h2 className="text-xl font-semibold mb-4">Registration Successful!</h2>
@@ -81,6 +103,7 @@ const SuccessModal = memo(({ onClose }: { onClose: () => void }) => (
     </div>
   </div>
 ));
+SuccessModal.displayName = "SuccessModal";
 
 const RegistrationForm = () => {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<RegistrationFormData>();
@@ -104,7 +127,7 @@ const RegistrationForm = () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
 
-      let portfolioImageUrls: string[] = [];
+      const portfolioImageUrls: string[] = [];
       if (data.portfolioImages && data.portfolioImages.length > 0) {
         const portfolioImagesArray = Array.from(data.portfolioImages).slice(0, 4);
         for (const image of portfolioImagesArray) {

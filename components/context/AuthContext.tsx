@@ -1,12 +1,22 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import { db } from "@/firebaseConfig"; // Firestore import
+import { db } from "@/firebaseConfig";
 import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
+
+// Define a UserType based on your user data structure
+interface UserType {
+  id: string;
+  name: string;
+  email: string;
+  gender: string;
+  maritalStatus: string;
+  matches?: UserType[];
+}
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  user: any; // Replace with your actual user type
+  user: UserType | null;
   login: (token: string) => void;
   logout: () => void;
 }
@@ -15,49 +25,50 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<any>(null); // State for storing user data
-  const [hydrated, setHydrated] = useState(false); 
+  const [user, setUser] = useState<UserType | null>(null);
+  const [hydrated, setHydrated] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    const savedToken = Cookies.get("token");
-    if (savedToken) {
-      setToken(savedToken);
-      fetchUserProfile(); // Fetch user profile when token is found
-    }
-    setHydrated(true);
-  }, []);
 
   const fetchUserProfile = async () => {
     if (!token) return;
     try {
-      const userDoc = await getDoc(doc(db, "users", "your-user-id")); // Replace "your-user-id" with actual user ID (e.g., user email or UID)
+      const userDoc = await getDoc(doc(db, "users", "your-user-id"));
       if (userDoc.exists()) {
-        setUser(userDoc.data());
-        fetchMatches(userDoc.data());
+        const userData = userDoc.data() as UserType;
+        setUser(userData);
+        fetchMatches(userData);
       }
     } catch (err) {
       console.error("Error fetching user profile:", err);
     }
   };
 
-  const fetchMatches = async (userData: any) => {
+  const fetchMatches = async (userData: UserType) => {
     try {
       const q = query(collection(db, "users"), where("maritalStatus", "==", "Single"));
       const querySnapshot = await getDocs(q);
       const matches = querySnapshot.docs
-        .map((doc) => doc.data())
+        .map((doc) => doc.data() as UserType)
         .filter((data) => data.gender !== userData.gender);
-      setUser((prev: any) => ({ ...prev, matches }));
+      setUser((prev) => prev ? { ...prev, matches } : null);
     } catch (err) {
       console.error("Error fetching matches:", err);
     }
   };
 
+  useEffect(() => {
+    const savedToken = Cookies.get("token");
+    if (savedToken) {
+      setToken(savedToken);
+      fetchUserProfile();
+    }
+    setHydrated(true);
+  }, [fetchUserProfile]);
+
   const login = (newToken: string) => {
     Cookies.set("token", newToken, { expires: 30, sameSite: "lax", path: "/", secure: process.env.NODE_ENV === "production" });
     setToken(newToken);
-    fetchUserProfile(); 
+    fetchUserProfile();
     router.push("/profile");
   };
 
