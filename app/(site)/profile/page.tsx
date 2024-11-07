@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { FaEdit, FaCheck, FaCamera, FaHeart, FaTrash } from "react-icons/fa";
+import { FaEdit, FaCamera, FaHeart, FaTrash } from "react-icons/fa";
 import { useAuth } from "@/components/context/AuthContext";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import Cookies from "js-cookie";
@@ -37,7 +37,7 @@ const Profile = () => {
   const { logout } = useAuth();
   const [user, setUser] = useState<User | null>(null);
   const [matches, setMatches] = useState<User[]>([]);
-  const [editMode, setEditMode] = useState(false);
+  const [editMode] = useState(false);
   const [loading, setLoading] = useState(true);
   const [visibleContacts, setVisibleContacts] = useState<{ [key: string]: boolean }>({});
 

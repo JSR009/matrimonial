@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { db } from "@/firebaseConfig";
 import { collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
+import Image from "next/image";
 
 interface Contact {
   id?: string;
@@ -266,7 +267,7 @@ const AdminDashboard: React.FC = () => {
             <td className="border px-6 py-4 text-gray-800">{user.placeOfBirth || "N/A"}</td>
             <td className="border px-6 py-4">
               {user.profileImage ? (
-                <img src={user.profileImage} alt="Profile" className="w-12 h-12 object-cover rounded-full shadow-sm" />
+                <Image src={user.profileImage} alt="Profile" height={10} width={10} className="w-12 h-12 object-cover rounded-full shadow-sm" />
               ) : (
                 "N/A"
               )}
@@ -274,7 +275,7 @@ const AdminDashboard: React.FC = () => {
             <td className="border px-6 py-4">
               {user.portfolioImages && user.portfolioImages.length > 0
                 ? user.portfolioImages.map((image, index) => (
-                    <img key={index} src={image} alt={`Portfolio ${index + 1}`} className="w-12 h-12 object-cover rounded-full inline-block mr-2 shadow-sm" />
+                    <Image key={index} src={image} alt={`Portfolio ${index + 1}`} height={10} width={10} className="w-12 h-12 object-cover rounded-full inline-block mr-2 shadow-sm" />
                   ))
                 : "N/A"}
             </td>
