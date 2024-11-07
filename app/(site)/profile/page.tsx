@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { FaEdit, FaCheck, FaCamera, FaHeart, FaTrash } from "react-icons/fa";
 import { useAuth } from "@/components/context/AuthContext";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import { db, storage } from "@/firebaseConfig";
@@ -14,7 +15,7 @@ type User = {
   birthDate: string | number | Date;
   preferredMinAge: number;
   name: string;
-  email: string;
+  email: string | undefined;
   dob?: string;
   gender?: string;
   caste?: string;
@@ -61,23 +62,27 @@ const Profile = () => {
   const fetchUserData = async () => {
     setLoading(true);
     try {
+      // Extract token from cookies
       const token = Cookies.get("authToken");
-      if (!token) throw new Error("No token found in cookies");
+      if (!token) throw new Error("No token found");
   
-      const response = await fetch("/api/getUser", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      // Decode the token to retrieve email, using type assertion to ensure correct type
+      const decodedToken = jwt.decode(token) as JwtPayload | null;
+      const email = decodedToken?.email as string | undefined;
   
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data.user);
+      if (!email) throw new Error("Email not found in token");
+  
+      // Query Firestore based on email
+      const usersRef = collection(db, "users");
+      const q = query(usersRef, where("email", "==", email));
+      const querySnapshot = await getDocs(q);
+  
+      if (!querySnapshot.empty) {
+        // Use type assertion to treat `userData` as a `User`
+        const userData = querySnapshot.docs[0].data() as User;
+        setUser(userData);
       } else {
-        const errorData = await response.json();
-        console.error("Failed to fetch user data:", errorData);
+        console.error("No user found with this email.");
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -85,7 +90,6 @@ const Profile = () => {
       setLoading(false);
     }
   };
-  
   
   
 
@@ -336,11 +340,11 @@ const Profile = () => {
           <p>{match.occupation}</p>
           <p>Height: {match.height}</p>
           <p>Caste: {match.caste}</p>
-                  <button
+          <button
           className="mt-4 bg-white text-blue-600 py-1 px-4 rounded-lg shadow-md hover:bg-blue-100 flex items-center justify-center"
-          onClick={() => toggleContactVisibility(match.email)}
+          onClick={() => match.email && toggleContactVisibility(match.email)} // Ensure match.email is not undefined
         >
-          {visibleContacts[match.email] ? (
+          {match.email && visibleContacts[match.email] ? ( // Check that match.email is not undefined
             <span>{match.phone || "No contact available"}</span>
           ) : (
             <>
@@ -348,6 +352,7 @@ const Profile = () => {
             </>
           )}
         </button>
+
 
         </div>
       ))}
@@ -366,3 +371,5 @@ const Profile = () => {
 };
 
 export default Profile; 
+
+
