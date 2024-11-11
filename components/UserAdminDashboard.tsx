@@ -42,10 +42,6 @@ const AdminDashboard = () => {
   const [editMode, setEditMode] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [notification, setNotification] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-
-
 
   const { register, handleSubmit, reset } = useForm<RegistrationFormData>();
 
@@ -103,11 +99,11 @@ const AdminDashboard = () => {
     setModalOpen(true);
   };
 
-  const onSubmit = async (data: RegistrationFormData) => {
+  const onSubmit = async ( data: RegistrationFormData) => {
     setLoading(true);
     try {
       if (editMode && selectedId) {
-        await updateDoc(doc(db, "users", selectedId), data as any);
+        await updateDoc(doc(db, "users", selectedId), data as  { [key: string]: any } );
         setNotification("Entry updated successfully.");
       } else {
         await addDoc(collection(db, "users"), data);

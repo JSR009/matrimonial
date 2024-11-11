@@ -1,10 +1,9 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { db } from "@/firebaseConfig";
 import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 
-// Define a UserType based on your user data structure
 interface UserType {
   id: string;
   name: string;
@@ -29,7 +28,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [hydrated, setHydrated] = useState(false);
   const router = useRouter();
 
-  const fetchUserProfile = async () => {
+  const fetchMatches = useCallback(async (userData: UserType) => {
+    try {
+      const q = query(collection(db, "users"), where("maritalStatus", "==", "Single"));
+      const querySnapshot = await getDocs(q);
+      const matches = querySnapshot.docs
+        .map((doc) => doc.data() as UserType)
+        .filter((data) => data.gender !== userData.gender);
+      setUser((prev) => (prev ? { ...prev, matches } : null));
+    } catch (err) {
+      console.error("Error fetching matches:", err);
+    }
+  }, []);
+
+  const fetchUserProfile = useCallback(async () => {
     if (!token) return;
     try {
       const userDoc = await getDoc(doc(db, "users", "your-user-id"));
@@ -41,20 +53,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (err) {
       console.error("Error fetching user profile:", err);
     }
-  };
-
-  const fetchMatches = async (userData: UserType) => {
-    try {
-      const q = query(collection(db, "users"), where("maritalStatus", "==", "Single"));
-      const querySnapshot = await getDocs(q);
-      const matches = querySnapshot.docs
-        .map((doc) => doc.data() as UserType)
-        .filter((data) => data.gender !== userData.gender);
-      setUser((prev) => prev ? { ...prev, matches } : null);
-    } catch (err) {
-      console.error("Error fetching matches:", err);
-    }
-  };
+  }, [token, fetchMatches]);
 
   useEffect(() => {
     const savedToken = Cookies.get("token");
