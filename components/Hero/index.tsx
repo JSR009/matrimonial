@@ -1,10 +1,16 @@
-
 "use client";
 
 import Image from "next/image";
 import Link from "next/link";
+import { useAuth } from "@/components/context/AuthContext"; // Adjust the import path as needed
 
 const Hero = () => {
+  const { isAuthenticated, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <section className="relative w-full">
       {/* For small devices: Image displayed above the text */}
@@ -26,22 +32,39 @@ const Hero = () => {
           <span className="text-yellow-500">Perfect Match</span> Today
         </h1>
         <p className="text-lg text-gray-600 mb-4">
-        Join millions of users who trust us for finding meaning relationship
+          Join millions of users who trust us for finding meaningful relationships
         </p>
 
         {/* Buttons */}
         <div className="mt-4 flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 justify-center">
-          <button className="bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition">
-            <Link href="/register">
-            Register
-            </Link>
-            
-          </button>
-          <button className="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition">
-           <Link href="/login">
-           Login
-           </Link>
-          </button>
+          {isAuthenticated ? (
+            <>
+              <Link href="/profile">
+                <button className="bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition">
+                  My Profile
+                </button>
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link href="/register">
+                <button className="bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition">
+                  Register
+                </button>
+              </Link>
+              <Link href="/login">
+                <button className="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition">
+                  Login
+                </button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
 
@@ -59,20 +82,40 @@ const Hero = () => {
             Find Your{" "}
             <span className="text-yellow-400">Perfect Match</span> Today
           </h1>
-          {/* <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto">
-            Join millions of users who trust us in finding meaningful
-            relationships. We bring together singles for serious and
-            long-lasting connections.
-          </p> */}
+          <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto">
+            Join millions of users who trust us for finding meaningful relationships
+          </p>
 
           {/* Buttons */}
           <div className="mt-8 flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:space-x-4 justify-center">
-            {/* <button className="bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition">
-              Register
-            </button>
-            <button className="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition">
-              Login
-            </button> */}
+            {isAuthenticated ? (
+              <>
+                <Link href="/profile">
+                  <button className="bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition">
+                    My Profile
+                  </button>
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/register">
+                  <button className="bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition">
+                    Register
+                  </button>
+                </Link>
+                <Link href="/login">
+                  <button className="bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition">
+                    Login
+                  </button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>

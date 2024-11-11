@@ -5,17 +5,18 @@ const Pricing = () => {
   const plans = [
     {
       name: "Basic",
-      price: "9999",
+      price: "11000",
       features: [
         "Basic Search Filters",
         "Limited Customer Support",
         "Profile Boosting (Limited)",
       ],
       buttonColor: "bg-blue-500 hover:bg-blue-600",
+      validity: "1 year"
     },
     {
       name: "Pro",
-      price: "19999",
+      price: "21000",
       features: [
         "Advanced Search Filters",
         "24/7 Customer Support",
@@ -23,10 +24,11 @@ const Pricing = () => {
         "Matchmaking Consultation",
       ],
       buttonColor: "bg-green-500 hover:bg-green-600",
+      validity: '3 year'
     },
     {
       name: "Pro Max",
-      price: "29999",
+      price: "31000",
       features: [
         "All Pro Features",
         "Priority Support",
@@ -35,6 +37,7 @@ const Pricing = () => {
         "VIP Profile Badge",
       ],
       buttonColor: "bg-purple-500 hover:bg-purple-600",
+      validity: 'Lifetime'
     },
   ];
 
@@ -55,7 +58,7 @@ const Pricing = () => {
                 </h3>
                 <p className="text-5xl font-extrabold text-black-700 dark:text-white mb-6">
                   {plan.price}
-                  <span className="text-lg font-normal text-gray-500">/month</span>
+                  <span className="text-lg font-normal text-gray-500">/For {plan.validity}</span>
                 </p>
                 <ul className="space-y-4 mb-8">
                   {plan.features.map((feature, index) => (

@@ -4,18 +4,18 @@ import Image from "next/image";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/context/AuthContext";
+import dynamic from "next/dynamic";
 
-// Move navItems outside the component to avoid recreating on each render
 const navItems = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/services", label: "Services" },
   { href: "/astrology", label: "Numerology" },
-  { href: "/contact", label: "Contact Us" },
+  { href: "/contact", label: "Contact" },
 ];
 
-function Header() {
-  const navRef = useRef<HTMLDivElement | null>(null);
+const Header = () => {
+  const navRef = useRef(null);
   const [navbar, setNavbar] = useState(false);
   const router = useRouter();
   const { isAuthenticated, logout } = useAuth();
@@ -30,25 +30,37 @@ function Header() {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+      if (navRef.current && !(navRef.current as HTMLDivElement).contains(event.target as Node)) {
         setNavbar(false);
       }
     };
-
+  
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+  
+
+  useEffect(() => {
+    router.prefetch('/profile');
+    router.prefetch('/register');
+    router.prefetch('/login');
+  }, [router]);
 
   return (
     <div>
-      <nav className="w-full bg-white fixed top-0 left-0 right-0 z-10">
-        <div className="flex justify-between items-center p-4 md:px-8">
-          {/* LOGO */}
-          <Link href="/" className="text-2xl text-cyan-600 font-bold">
-            <Image src="/images/logo3.jpeg" alt="logo" height={60} width={60} />
+      <nav className="w-full bg-white fixed top-0 left-0 right-0 z-10 shadow-md">
+        <div className="flex justify-between items-center p-3 md:px-6">
+          <Link href="/" className="text-2xl font-bold">
+            <Image
+              src="/images/logo3.jpeg"
+              alt="logo"
+              height={60}
+              width={60}
+              className="rounded-full border border-gray-300 shadow-lg object-cover"
+              priority
+            />
           </Link>
 
-          {/* HAMBURGER BUTTON FOR MOBILE */}
           <div className="md:hidden">
             <button onClick={() => setNavbar(!navbar)} className="p-2">
               <Image
@@ -60,21 +72,20 @@ function Header() {
             </button>
           </div>
 
-          {/* NAVIGATION LINKS */}
           <div
             ref={navRef}
             className={`${
               navbar ? "translate-x-0" : "-translate-x-full"
             } fixed top-0 left-0 w-3/4 h-full bg-white md:bg-transparent md:static md:flex md:translate-x-0 transition-transform duration-200 ease-in-out z-20`}
           >
-            <div className="flex flex-col items-center mt-20 space-y-6 md:flex-row md:space-y-0 md:space-x-6 md:mt-0">
-              <ul className="flex flex-col items-center space-y-4 md:flex-row md:space-y-0 md:space-x-6">
+            <div className="flex flex-col items-center mt-20 space-y-6 md:flex-row md:space-y-0 md:space-x-4 md:mt-0">
+              <ul className="flex flex-col items-center space-y-4 md:flex-row md:space-y-0 md:space-x-4">
                 {navItems.map((item) => (
                   <li
                     key={item.href}
-                    className="text-lg text-gray-600 hover:text-purple-600 transition-all relative"
+                    className="text-lg text-gray-600 hover:text-purple-600 transition-all"
                   >
-                    <Link href={item.href} onClick={closeNavbar}>
+                    <Link href={item.href} onClick={closeNavbar} prefetch>
                       <span className="hover:bg-white hover:bg-opacity-40 hover:rounded-lg p-2 transition-all duration-200">
                         {item.label}
                       </span>
@@ -83,18 +94,27 @@ function Header() {
                 ))}
               </ul>
 
-              {/* AUTH BUTTONS */}
-              <div className="flex flex-col items-center space-y-4 md:flex-row md:space-y-0 md:space-x-6 md:ml-4">
+              <div className="flex flex-col items-center space-y-4 md:flex-row md:space-y-0 md:space-x-4 md:ml-auto ml-10">
                 {isAuthenticated ? (
-                  <button
-                    onClick={handleLogout}
-                    className="ml-8 px-5 py-2 text-white bg-gradient-to-r from-red-500 to-red-700 rounded-md shadow-lg hover:shadow-xl transition w-full md:w-auto"
-                  >
-                    Logout
-                  </button>
+                  <>
+                    <Link href="/profile" prefetch>
+                      <button
+                        onClick={closeNavbar}
+                        className="px-5 py-2 text-center text-white bg-gradient-to-r from-green-500 to-green-700 rounded-md shadow-lg hover:shadow-xl transition-all w-full md:w-auto"
+                      >
+                        My Profile
+                      </button>
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="px-5 py-2 text-center text-white bg-gradient-to-r from-red-500 to-red-700 rounded-md shadow-lg hover:shadow-xl transition-all w-full md:w-auto"
+                    >
+                      Logout
+                    </button>
+                  </>
                 ) : (
                   <>
-                    <Link href="/register">
+                    <Link href="/register" prefetch>
                       <button
                         onClick={closeNavbar}
                         className="px-5 py-2 text-center text-white bg-gradient-to-r from-blue-500 to-blue-700 rounded-md shadow-lg hover:shadow-xl transition-all w-full md:w-auto"
@@ -102,7 +122,7 @@ function Header() {
                         Register
                       </button>
                     </Link>
-                    <Link href="/login">
+                    <Link href="/login" prefetch>
                       <button
                         onClick={closeNavbar}
                         className="px-5 py-2 text-center text-white bg-gradient-to-r from-gray-500 to-gray-700 rounded-md shadow-lg hover:shadow-xl transition-all w-full md:w-auto"
@@ -116,7 +136,6 @@ function Header() {
             </div>
           </div>
 
-          {/* OVERLAY BACKGROUND */}
           {navbar && (
             <div
               onClick={closeNavbar}
@@ -127,6 +146,6 @@ function Header() {
       </nav>
     </div>
   );
-}
+};
 
-export default Header;
+export default dynamic(() => Promise.resolve(Header), { ssr: false });

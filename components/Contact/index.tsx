@@ -192,15 +192,16 @@ const Contact: React.FC = () => {
                   </select>
                 </div>
                 <div className="mb-6">
-                  <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    placeholder="Your Message (e.g., preferences, details)"
-                    rows={4}
-                    required
-                    className="w-full border-b border-gray-300 bg-transparent py-3 focus:border-blue-500 outline-none transition-all dark:border-gray-700 dark:focus:border-blue-300"
-                  ></textarea>
+               
+                  <input 
+                  type="text"
+                  name="message"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  placeholder="Your Message"
+                  required
+                  className="w-full border-b border-gray-300 bg-transparent py-3 focus:border-blue-500 outline-none transition-all dark:border-gray-700 dark:focus:border-blue-300"
+                  />
                 </div>
                 <div className="mb-6">
                   <select
@@ -256,7 +257,7 @@ Timing: Monday to Saturday: 10 AM - 6 PM (Closed on govt. holiday)
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400">
                   <a href="mailto:yourmail@domainname.com" className="hover:text-blue-500">
-                    yourmail@domainname.com
+                    milanmunch20@gmail.com
                   </a>
                 </p>
               </div>
