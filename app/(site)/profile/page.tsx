@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { FaCamera, FaEdit } from "react-icons/fa";
-import { useAuth } from "@/components/context/AuthContext";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import Cookies from "js-cookie";
 import Image from "next/image";
