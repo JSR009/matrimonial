@@ -35,12 +35,12 @@ interface RegistrationFormData {
   portfolioImages: string[];
 }
 
-const copyUserData = (entry: { profilePicture: any; gender: any; name: any; dob: any; placeOfBirth: any; timeOfBirth: any; height: any; complexion: any; caste: any; occupation: any; income: any; education: any; fathersName: any; fathersOccupation: any; mothersName: any; mothersOccupation: any; siblings: any; maritalStatus: any; phone: any; email: any; address: any; password: any; }) => {
+const copyUserData = (entry: { profilePicture: string; gender: string; name: string; dob: string; placeOfBirth: string; timeOfBirth: string; height: string; complexion: string; caste: string; occupation: string; income: string; education: string; fathersName: string; fathersOccupation: string; mothersName: string; mothersOccupation: string; siblings: string; maritalStatus: string; phone: string; email: string; address: string; password: string; }) => {
   const headers = [
     "Profile Picture", "Gender", "Name", "DOB", "Place of Birth", "Time of Birth",
     "Height", "Complexion", "Caste", "Occupation", "Income", "Education",
     "Father's Name", "Father's Occupation", "Mother's Name", "Mother's Occupation",
-    "Siblings", "Marital Status", "Phone", "Email", "Address", "Password"
+    "Siblings", "Marital Status", "Phone", "Email", "Address"
   ];
 
   const userDetails = [
@@ -48,7 +48,7 @@ const copyUserData = (entry: { profilePicture: any; gender: any; name: any; dob:
     entry.timeOfBirth, entry.height, entry.complexion, entry.caste, entry.occupation,
     entry.income, entry.education, entry.fathersName, entry.fathersOccupation,
     entry.mothersName, entry.mothersOccupation, entry.siblings, entry.maritalStatus,
-    entry.phone, entry.email, entry.address, entry.password
+    entry.phone, entry.email, entry.address
   ];
 
   const formattedData = headers.map((header, index) => `${header}: ${userDetails[index]}`).join('\n');
