@@ -56,10 +56,10 @@ const Pricing = () => {
                 <h3 className="text-3xl font-bold text-gray-700 dark:text-white mb-4">
                   {plan.name}
                 </h3>
-                <p className="text-5xl font-extrabold text-black-700 dark:text-white mb-6">
+                <p className="text-5xl font-extrabold text-black-700 dark:text-white">
                   {plan.price}
-                  <span className="text-lg font-normal text-gray-500">/For {plan.validity}</span>
                 </p>
+                <span className="text-lg font-normal text-gray-500 mb-6">/For {plan.validity}</span>
                 <ul className="space-y-4 mb-8">
                   {plan.features.map((feature, index) => (
                     <li

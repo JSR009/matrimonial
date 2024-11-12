@@ -35,6 +35,29 @@ interface RegistrationFormData {
   portfolioImages: string[];
 }
 
+const copyUserData = (entry: { profilePicture: any; gender: any; name: any; dob: any; placeOfBirth: any; timeOfBirth: any; height: any; complexion: any; caste: any; occupation: any; income: any; education: any; fathersName: any; fathersOccupation: any; mothersName: any; mothersOccupation: any; siblings: any; maritalStatus: any; phone: any; email: any; address: any; password: any; }) => {
+  const headers = [
+    "Profile Picture", "Gender", "Name", "DOB", "Place of Birth", "Time of Birth",
+    "Height", "Complexion", "Caste", "Occupation", "Income", "Education",
+    "Father's Name", "Father's Occupation", "Mother's Name", "Mother's Occupation",
+    "Siblings", "Marital Status", "Phone", "Email", "Address", "Password"
+  ];
+
+  const userDetails = [
+    entry.profilePicture, entry.gender, entry.name, entry.dob, entry.placeOfBirth,
+    entry.timeOfBirth, entry.height, entry.complexion, entry.caste, entry.occupation,
+    entry.income, entry.education, entry.fathersName, entry.fathersOccupation,
+    entry.mothersName, entry.mothersOccupation, entry.siblings, entry.maritalStatus,
+    entry.phone, entry.email, entry.address, entry.password
+  ];
+
+  const formattedData = headers.map((header, index) => `${header}: ${userDetails[index]}`).join('\n');
+  
+  navigator.clipboard.writeText(formattedData)
+    .then(() => alert('User details copied to clipboard!'))
+    .catch((error) => console.error('Copy failed', error));
+};
+
 const AdminDashboard = () => {
   const [data, setData] = useState<RegistrationFormData[]>([]);
   const [loading, setLoading] = useState(false);
@@ -42,6 +65,7 @@ const AdminDashboard = () => {
   const [editMode, setEditMode] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [notification, setNotification] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const { register, handleSubmit, reset } = useForm<RegistrationFormData>();
 
@@ -121,7 +145,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold text-center mb-4">Admin Dashboard</h1>
+      <h1 className="text-2xl font-bold text-center mb-4">Matrimonial User</h1>
       <button
         onClick={handleNewEntry}
         className="bg-green-500 text-white px-4 py-2 rounded mb-4 hover:bg-green-600 flex items-center"
@@ -138,121 +162,154 @@ const AdminDashboard = () => {
         </div>
       )}
       <div className="overflow-x-auto">
-  <table className="w-full table-auto border border-gray-300 bg-white">
-    <thead>
-      <tr className="bg-gray-200 text-gray-700">
-        <th className="border p-2">Profile Picture</th>
-        <th className="border p-2">Gender</th>
-        <th className="border p-2">Name</th>
-        <th className="border p-2">DOB</th>
-        <th className="border p-2">Place of Birth</th>
-        <th className="border p-2">Time of Birth</th>
-        <th className="border p-2">Height</th>
-        <th className="border p-2">Complexion</th>
-        <th className="border p-2">Caste</th>
-        <th className="border p-2">Occupation</th>
-        <th className="border p-2">Income</th>
-        <th className="border p-2">Education</th>
-        <th className="border p-2">Father's Name</th>
-        <th className="border p-2">Father's Occupation</th>
-        <th className="border p-2">Mother's Name</th>
-        <th className="border p-2">Mother's Occupation</th>
-        <th className="border p-2">Siblings</th>
-        <th className="border p-2">Marital Status</th>
-        <th className="border p-2">Phone</th>
-        <th className="border p-2">Email</th>
-        <th className="border p-2">Address</th>
-        <th className="border p-2">Password</th>
-        <th className="border p-2">Actions</th>
+      <table className="w-full table-auto border border-gray-300 bg-white">
+  <thead>
+    <tr className="bg-gray-200 text-gray-700">
+      <th className="border p-2">Profile Picture</th>
+      <th className="border p-2">Gender</th>
+      <th className="border p-2">Name</th>
+      <th className="border p-2">DOB</th>
+      <th className="border p-2">Place of Birth</th>
+      <th className="border p-2">Time of Birth</th>
+      <th className="border p-2">Height</th>
+      <th className="border p-2">Complexion</th>
+      <th className="border p-2">Caste</th>
+      <th className="border p-2">Occupation</th>
+      <th className="border p-2">Income</th>
+      <th className="border p-2">Education</th>
+      <th className="border p-2">Father's Name</th>
+      <th className="border p-2">Father's Occupation</th>
+      <th className="border p-2">Mother's Name</th>
+      <th className="border p-2">Mother's Occupation</th>
+      <th className="border p-2">Siblings</th>
+      <th className="border p-2">Marital Status</th>
+      <th className="border p-2">Phone</th>
+      <th className="border p-2">Email</th>
+      <th className="border p-2">Address</th>
+      <th className="border p-2">Password</th>
+      <th className="border p-2">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {data.map(entry => (
+      <tr key={entry.email} className="text-gray-700 hover:bg-gray-100 transition">
+        <td className="border p-2">
+          <Image src={entry.profilePicture} height={50} width={50} alt="Profile" className="h-10 w-10 rounded-full object-cover mx-auto" />
+        </td>
+        <td className="border p-2">{entry.gender}</td>
+        <td className="border p-2">{entry.name}</td>
+        <td className="border p-2">{entry.dob}</td>
+        <td className="border p-2">{entry.placeOfBirth}</td>
+        <td className="border p-2">{entry.timeOfBirth}</td>
+        <td className="border p-2">{entry.height}</td>
+        <td className="border p-2">{entry.complexion}</td>
+        <td className="border p-2">{entry.caste}</td>
+        <td className="border p-2">{entry.occupation}</td>
+        <td className="border p-2">{entry.income}</td>
+        <td className="border p-2">{entry.education}</td>
+        <td className="border p-2">{entry.fathersName}</td>
+        <td className="border p-2">{entry.fathersOccupation}</td>
+        <td className="border p-2">{entry.mothersName}</td>
+        <td className="border p-2">{entry.mothersOccupation}</td>
+        <td className="border p-2">{entry.siblings}</td>
+        <td className="border p-2">{entry.maritalStatus}</td>
+        <td className="border p-2">{entry.phone}</td>
+        <td className="border p-2">{entry.email}</td>
+        <td className="border p-2">{entry.address}</td>
+        <td className="border p-2">{entry.password}</td>
+        <td className="border p-2 flex space-x-2 justify-center">
+          <button onClick={() => handleEdit(entry)} className="bg-yellow-500 text-white py-1 px-3 rounded hover:bg-yellow-600">
+            Edit
+          </button>
+          <button
+            onClick={() => entry.id && handleDelete(entry.id)}
+            className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => copyUserData(entry)}
+            className="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600"
+          >
+            Copy
+          </button>
+        </td>
       </tr>
-    </thead>
-    <tbody>
-      {data.map(entry => (
-        <tr key={entry.email} className="text-gray-700 hover:bg-gray-100 transition">
-          <td className="border p-2">
-            <Image src={entry.profilePicture} height={50} width={50} alt="Profile" className="h-10 w-10 rounded-full object-cover mx-auto" />
-          </td>
-          <td className="border p-2">{entry.gender}</td>
-          <td className="border p-2">{entry.name}</td>
-          <td className="border p-2">{entry.dob}</td>
-          <td className="border p-2">{entry.placeOfBirth}</td>
-          <td className="border p-2">{entry.timeOfBirth}</td>
-          <td className="border p-2">{entry.height}</td>
-          <td className="border p-2">{entry.complexion}</td>
-          <td className="border p-2">{entry.caste}</td>
-          <td className="border p-2">{entry.occupation}</td>
-          <td className="border p-2">{entry.income}</td>
-          <td className="border p-2">{entry.education}</td>
-          <td className="border p-2">{entry.fathersName}</td>
-          <td className="border p-2">{entry.fathersOccupation}</td>
-          <td className="border p-2">{entry.mothersName}</td>
-          <td className="border p-2">{entry.mothersOccupation}</td>
-          <td className="border p-2">{entry.siblings}</td>
-          <td className="border p-2">{entry.maritalStatus}</td>
-          <td className="border p-2">{entry.phone}</td>
-          <td className="border p-2">{entry.email}</td>
-          <td className="border p-2">{entry.address}</td>
-          <td className="border p-2">{entry.password}</td>
-          <td className="border p-2 flex space-x-2 justify-center">
-            <button onClick={() => handleEdit(entry)} className="bg-yellow-500 text-white py-1 px-3 rounded hover:bg-yellow-600"
-            >
-             Edit
-            </button>
-            <button
-              onClick={() => entry.id && handleDelete(entry.id)}
-              className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
-            >
-              Delete
-            </button>
+    ))}
+  </tbody>
+</table>
 
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
 </div>
 
 
       {/* Modal */}
       {modalOpen && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-    <div className="bg-white p-6 rounded-lg shadow-lg w-96 max-h-[80vh] overflow-y-auto mt-10 relative">
-      <h2 className="text-xl font-semibold mb-4 text-center">{editMode ? "Edit Entry" : "New Entry"}</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-1 gap-3">
-          <input {...register("gender")} placeholder="Gender" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
-          <input {...register("name")} placeholder="Name" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
-          <input {...register("dob")} placeholder="Date of Birth" type="date" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
-          <input {...register("placeOfBirth")} placeholder="Place of Birth" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
-          <input {...register("timeOfBirth")} placeholder="Time of Birth" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
-          <input {...register("height")} placeholder="Height" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
-          <input {...register("complexion")} placeholder="Complexion" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
-          <input {...register("caste")} placeholder="Caste" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
-          <input {...register("occupation")} placeholder="Occupation" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
-          <input {...register("income")} placeholder="Income" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
-          <input {...register("education")} placeholder="Education" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
-          <input {...register("fathersName")} placeholder="Father's Name" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
-          <input {...register("fathersOccupation")} placeholder="Father's Occupation" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
-          <input {...register("mothersName")} placeholder="Mother's Name" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
-          <input {...register("mothersOccupation")} placeholder="Mother's Occupation" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
-          <input {...register("siblings")} placeholder="Siblings" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
-          <input {...register("maritalStatus")} placeholder="Marital Status" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
-          <input {...register("phone")} placeholder="Phone" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
-          <input {...register("email")} placeholder="Email" type="email" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
-          <input {...register("password")} placeholder="Password" type="password" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
-          <input {...register("confirmPassword")} placeholder="Confirm Password" type="password" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
-          <input {...register("address")} placeholder="Address" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="bg-white p-6 rounded-lg shadow-lg w-96 max-h-[80vh] overflow-y-auto mt-10 relative">
+          <h2 className="text-xl font-semibold mb-4 text-center">{editMode ? "Edit Entry" : "New Entry"}</h2>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="grid grid-cols-1 gap-3">
+              <input {...register("gender")} placeholder="Gender" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
+              <input {...register("name")} placeholder="Name" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
+              <input {...register("dob")} placeholder="Date of Birth" type="date" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
+              <input {...register("placeOfBirth")} placeholder="Place of Birth" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
+              <input {...register("timeOfBirth")} placeholder="Time of Birth" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
+              <input {...register("height")} placeholder="Height" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
+              <input {...register("complexion")} placeholder="Complexion" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
+              <input {...register("caste")} placeholder="Caste" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
+              <input {...register("occupation")} placeholder="Occupation" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
+              <input {...register("income")} placeholder="Income" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
+              <input {...register("education")} placeholder="Education" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
+              <input {...register("fathersName")} placeholder="Father's Name" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
+              <input {...register("fathersOccupation")} placeholder="Father's Occupation" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
+              <input {...register("mothersName")} placeholder="Mother's Name" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
+              <input {...register("mothersOccupation")} placeholder="Mother's Occupation" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
+              <input {...register("siblings")} placeholder="Siblings" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
+              <input {...register("maritalStatus")} placeholder="Marital Status" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
+              <input {...register("phone")} placeholder="Phone" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
+              <input {...register("email")} placeholder="Email" type="email" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
+              <div className="relative">
+                <input
+                  {...register("password")}
+                  placeholder="Password"
+                  type={showPassword ? "text" : "password"}
+                  className="border p-2 rounded focus:outline-none focus:border-blue-500 w-full"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 px-3 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
+              </div>
+              <div className="relative">
+                <input
+                  {...register("confirmPassword")}
+                  placeholder="Confirm Password"
+                  type={showPassword ? "text" : "password"}
+                  className="border p-2 rounded focus:outline-none focus:border-blue-500 w-full"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 px-3 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
+              </div>
+              <input {...register("address")} placeholder="Address" className="border p-2 rounded focus:outline-none focus:border-blue-500" />
+            </div>
+            <button type="submit" className="bg-blue-500 text-white w-full p-2 mt-4 rounded hover:bg-blue-600 transition">
+              {editMode ? "Update Entry" : "Add Entry"}
+            </button>
+          </form>
+          <button onClick={() => setModalOpen(false)} className="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
+            <FaTimes />
+          </button>
         </div>
-        <button type="submit" className="bg-blue-500 text-white w-full p-2 mt-4 rounded hover:bg-blue-600 transition">
-          {editMode ? "Update Entry" : "Add Entry"}
-        </button>
-      </form>
-      <button onClick={() => setModalOpen(false)} className="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
-        <FaTimes />
-      </button>
-    </div>
-  </div>
-)}
+      </div>
+    )}
 
     </div>
   );

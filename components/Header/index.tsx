@@ -11,7 +11,7 @@ const navItems = [
   { href: "/about", label: "About" },
   { href: "/services", label: "Services" },
   { href: "/astrology", label: "Numerology" },
-  { href: "/contact", label: "Contact" },
+  { href: "/contact", label: "Contact us" },
 ];
 
 const Header = () => {
@@ -38,7 +38,6 @@ const Header = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-  
 
   useEffect(() => {
     router.prefetch('/profile');
@@ -78,7 +77,7 @@ const Header = () => {
               navbar ? "translate-x-0" : "-translate-x-full"
             } fixed top-0 left-0 w-3/4 h-full bg-white md:bg-transparent md:static md:flex md:translate-x-0 transition-transform duration-200 ease-in-out z-20`}
           >
-            <div className="flex flex-col items-center mt-20 space-y-6 md:flex-row md:space-y-0 md:space-x-4 md:mt-0">
+            <div className="flex flex-col items-center mt-20 space-y-6 md:flex-row md:space-y-0 md:space-x-4 md:mt-0 md:ml-[-20]">
               <ul className="flex flex-col items-center space-y-4 md:flex-row md:space-y-0 md:space-x-4">
                 {navItems.map((item) => (
                   <li
@@ -100,14 +99,14 @@ const Header = () => {
                     <Link href="/profile" prefetch>
                       <button
                         onClick={closeNavbar}
-                        className="px-5 py-2 text-center text-white bg-gradient-to-r from-green-500 to-green-700 rounded-md shadow-lg hover:shadow-xl transition-all w-full md:w-auto"
+                        className="px-5 py-2 text-center text-white bg-gradient-to-r from-green-500 to-green-700 rounded-md shadow-lg hover:shadow-xl transition-all w-full md:w-auto hidden lg:inline-block"
                       >
                         My Profile
                       </button>
                     </Link>
                     <button
                       onClick={handleLogout}
-                      className="px-5 py-2 text-center text-white bg-gradient-to-r from-red-500 to-red-700 rounded-md shadow-lg hover:shadow-xl transition-all w-full md:w-auto"
+                      className="px-5 py-2 text-center text-white bg-gradient-to-r from-red-500 to-red-700 rounded-md shadow-lg hover:shadow-xl transition-all w-full md:w-auto hidden lg:inline-block"
                     >
                       Logout
                     </button>
@@ -117,7 +116,7 @@ const Header = () => {
                     <Link href="/register" prefetch>
                       <button
                         onClick={closeNavbar}
-                        className="px-5 py-2 text-center text-white bg-gradient-to-r from-blue-500 to-blue-700 rounded-md shadow-lg hover:shadow-xl transition-all w-full md:w-auto"
+                        className="px-5 py-2 text-center text-white bg-gradient-to-r from-blue-500 to-blue-700 rounded-md shadow-lg hover:shadow-xl transition-all w-full md:w-auto hidden lg:inline-block"
                       >
                         Register
                       </button>
@@ -125,7 +124,7 @@ const Header = () => {
                     <Link href="/login" prefetch>
                       <button
                         onClick={closeNavbar}
-                        className="px-5 py-2 text-center text-white bg-gradient-to-r from-gray-500 to-gray-700 rounded-md shadow-lg hover:shadow-xl transition-all w-full md:w-auto"
+                        className="px-5 py-2 text-center text-white bg-gradient-to-r from-gray-500 to-gray-700 rounded-md shadow-lg hover:shadow-xl transition-all w-full md:w-auto hidden lg:inline-block"
                       >
                         Login
                       </button>
