@@ -33,7 +33,6 @@ type User = {
 };
 
 const Profile = () => {
-  const { logout } = useAuth();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);

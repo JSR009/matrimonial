@@ -81,7 +81,7 @@ const ContactAdminDashboard: React.FC = () => {
   const handleModalSubmit = async (data: FormData) => {
     try {
       if (isEditing && currentData?.id) {
-        await updateDoc(doc(db, "matrimonialContacts", currentData.id), { ...data } as { [key: string]: any });
+        await updateDoc(doc(db, "matrimonialContacts", currentData.id), data as never);
         setFormDataList(
           formDataList.map((item) =>
             item.id === currentData.id ? { ...item, ...data } : item

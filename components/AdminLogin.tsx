@@ -4,7 +4,7 @@ import { useState } from "react";
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 
-const AdminLogin: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
+const AdminLogin: React.FC<{ onLogin: () => void }> = ({}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
