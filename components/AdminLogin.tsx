@@ -20,7 +20,7 @@ const AdminLogin: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
     await new Promise(resolve => setTimeout(resolve, 500));
 
     // Example email and password validation
-    if (email === "milanmunch20@gmail.com" && password === "admin123") {
+    if (email === "milanmunch20@gmail.com" && password === "$admin@20$") {
       Cookies.set('adminToken', 'true', { expires: 1 }); // Expires in 1 day
       router.push('/dashboard'); // Redirect to the dashboard
     } else {

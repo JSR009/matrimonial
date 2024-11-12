@@ -5,12 +5,22 @@ import { db } from "@/firebaseConfig";
 import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 
 interface UserType {
-  id: string;
-  name: string;
-  email: string;
-  gender: string;
-  maritalStatus: string;
-  matches?: UserType[];
+  name?: string;
+  email?: string;
+  dob?: string;
+  gender?: string;
+  caste?: string;
+  height?: string;
+  income?: string;
+  maritalStatus?: string;
+  occupation?: string;
+  complexion?: string;
+  education?: string;
+  fathersName?: string;
+  mothersName?: string;
+  phone?: string;
+  placeOfBirth?: string;
+  profileImage?: string;
 }
 
 interface AuthContextType {

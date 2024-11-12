@@ -103,7 +103,7 @@ const AdminDashboard = () => {
     setLoading(true);
     try {
       if (editMode && selectedId) {
-        await updateDoc(doc(db, "users", selectedId), data as  { [key: string]: any } );
+        await updateDoc(doc(db, "users", selectedId), { ...data } as { [key: string]: any } );
         setNotification("Entry updated successfully.");
       } else {
         await addDoc(collection(db, "users"), data);

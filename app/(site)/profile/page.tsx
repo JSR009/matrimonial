@@ -1,17 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
-import { FaEdit, FaCamera, FaHeart, FaTrash } from "react-icons/fa";
+import { FaCamera, FaEdit } from "react-icons/fa";
 import { useAuth } from "@/components/context/AuthContext";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import { db, storage } from "@/firebaseConfig";
-import {  collection, query, where, getDocs } from "firebase/firestore";
-import { uploadBytes, ref, getDownloadURL, deleteObject } from "firebase/storage";
-
-
+import { collection, doc, onSnapshot, query, where, updateDoc, getDocs } from "firebase/firestore";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
 
 type User = {
+  id?: string; // Add this line to include 'id' as an optional property
   birthDate: string | number | Date;
   preferredMinAge: number;
   name: string;
@@ -36,11 +35,11 @@ type User = {
 const Profile = () => {
   const { logout } = useAuth();
   const [user, setUser] = useState<User | null>(null);
-  const [matches, setMatches] = useState<User[]>([]);
-  const [editMode] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [visibleContacts, setVisibleContacts] = useState<{ [key: string]: boolean }>({});
-
+  const [isEditing, setIsEditing] = useState(false);
+  const [editData, setEditData] = useState<Partial<User>>({});
+  const [updateMessage, setUpdateMessage] = useState<string | null>(null);
+  const [matches, setMatches] = useState<User[]>([]); // State for matches
 
 
   const profileFields: { label: string; key: keyof User }[] = [
@@ -58,301 +57,220 @@ const Profile = () => {
     { label: "Phone", key: "phone" },
     { label: "Place of Birth", key: "placeOfBirth" }
   ];
-  const fetchUserData = async () => {
-    setLoading(true);
-    try {
-      // Extract token from cookies
-      const token = Cookies.get("authToken");
-      if (!token) throw new Error("No token found");
-  
-      // Decode the token to retrieve email, using type assertion to ensure correct type
-      const decodedToken = jwt.decode(token) as JwtPayload | null;
-      const email = decodedToken?.email as string | undefined;
-  
-      if (!email) throw new Error("Email not found in token");
-  
-      // Query Firestore based on email
-      const usersRef = collection(db, "users");
-      const q = query(usersRef, where("email", "==", email));
-      const querySnapshot = await getDocs(q);
-  
-      if (!querySnapshot.empty) {
-        // Use type assertion to treat `userData` as a `User`
-        const userData = querySnapshot.docs[0].data() as User;
-        setUser(userData);
-      } else {
-        console.error("No user found with this email.");
-      }
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  
-  
 
-  const calculateAge = (dob: string) => {
-    const birthDate = new Date(dob);
-    const ageDiff = Date.now() - birthDate.getTime();
-    const ageDate = new Date(ageDiff);
-    return Math.abs(ageDate.getUTCFullYear() - 1970);
-  };
+  useEffect(() => {
+    const token = Cookies.get("authToken");
+    if (!token) return;
   
-  const fetchMatches = async () => {
-    if (!user) return;
+    const decodedToken = jwt.decode(token) as JwtPayload | null;
+    const email = decodedToken?.email;
+    if (!email) return;
+  
+    const userQuery = query(collection(db, "users"), where("email", "==", email));
+  
+    const unsubscribe = onSnapshot(userQuery, (snapshot) => {
+      if (!snapshot.empty) {
+        const docData = snapshot.docs[0].data() as User;
+        docData.id = snapshot.docs[0].id; // Add this line to save the document ID.
+        setUser(docData);
+        fetchMatches(docData);
+      }
+      
+      setLoading(false);
+    });
+  
+    return () => unsubscribe();
+  }, []);
+  
+  const fetchMatches = async (currentUser: User) => {
     try {
-      const userDob = user.dob ?? "1970-01-01"; // Fallback if dob is undefined
-      const userAge = calculateAge(userDob);
-  
+      const genderPreference = currentUser.gender === "Male" ? "Female" : "Male";
+      const minAgeDate = new Date();
+      minAgeDate.setFullYear(minAgeDate.getFullYear() - currentUser.preferredMinAge);
+
       const matchesQuery = query(
         collection(db, "users"),
-        where("gender", "==", user.gender === "Male" ? "Female" : "Male"),
-        where("caste", "==", user.caste),
-        // Add more criteria if needed
+        where("gender", "==", genderPreference),
+        where("birthDate", "<=", minAgeDate)
       );
-  
-      const querySnapshot = await getDocs(matchesQuery);
-      const filteredMatches = querySnapshot.docs
-        .map((doc) => doc.data() as User)
-        .filter((match) => match.dob ? calculateAge(match.dob) === userAge : false); // Filter undefined dob
-  
-      setMatches(filteredMatches);
+
+      const matchesSnapshot = await getDocs(matchesQuery);
+      const fetchedMatches: User[] = matchesSnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id
+      })) as User[];
+
+      setMatches(fetchedMatches);
     } catch (error) {
       console.error("Error fetching matches:", error);
     }
   };
-  
-
- 
-  
 
 
-  const handleEditClick = () => {
-    if (user) {
-      
-    } else {
-      console.error("User data is missing.");
-    }
+  const handleEditToggle = () => {
+    setEditData(user || {});
+    setIsEditing(!isEditing);
   };
-  
-  // Update form data in the modal
- 
 
-  // Save changes to Firebase
-  const handleSaveChanges = async () => {
+  const handleInputChange = (key: keyof User, value: string) => {
+    setEditData((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleProfileUpdate = async () => {
+    if (!user || !user.email || !user.id) return; // Ensure user, email, and id are defined
+  
     try {
-      
+      const userDocRef = doc(db, "users", user.id); // Use `user.id` as the document ID
+      await updateDoc(userDocRef, editData);
+  
+      setUser((prev) => (prev ? { ...prev, ...editData } : prev));
+      setEditData({});
+      Cookies.set("userProfile", JSON.stringify({ ...user, ...editData }), { expires: 7 });
+  
+      setUpdateMessage("Your details have been successfully updated!");
+      setTimeout(() => setUpdateMessage(null), 3000);
+      setIsEditing(false);
     } catch (error) {
       console.error("Error updating profile:", error);
     }
   };
   
-  
-  
+  const handleImageUpload = async (file: File, path: string) => {
+    if (!user || !user.email) return;
+    const storageRef = ref(storage, path);
 
-  const handleImageUpload = async (file: File, path: string, key: keyof User) => {
     try {
-      const imageRef = ref(storage, path);
-      await uploadBytes(imageRef, file);
-      const imageUrl = await getDownloadURL(imageRef);
-      setUser((prev) => prev && { ...prev, [key]: imageUrl });
-      await handleSaveChanges();
-      await fetchUserData(); // Fetch updated user data after saving changes
+      await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(storageRef);
+      await updateDoc(doc(db, "users", user.email), { profileImage: downloadURL });
+
+      setUser((prev) => prev ? { ...prev, profileImage: downloadURL } : prev);
     } catch (error) {
-      console.error(`Error uploading ${key}:`, error);
+      console.error("Error uploading image:", error);
     }
   };
-  
-  // Rendering Profile Image with cache-busting query parameter
-  <Image
-    key={user?.profileImage}
-    src={`${user?.profileImage}?${new Date().getTime()}`}
-    alt="Profile"
-    className="rounded-full w-full h-full object-cover border-4 border-white shadow-lg"
-    width={100}
-    height={100}
-  />
-  
-
-  const handlePortfolioImagesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    const files = Array.from(e.target.files).slice(0, 4);
-    try {
-      const uploadedUrls = await Promise.all(
-        files.map(async (file) => {
-          const imageRef = ref(storage, `portfolioImages/${user?.email}/${file.name}`);
-          await uploadBytes(imageRef, file);
-          return getDownloadURL(imageRef);
-        })
-      );
-      setUser((prev) => prev && { ...prev, portfolioImages: [...(prev.portfolioImages || []), ...uploadedUrls] });
-      await handleSaveChanges();
-    } catch (error) {
-      console.error("Error uploading portfolio images:", error);
-    }
-  };
-
-  const toggleContactVisibility = (email: string) => {
-    setVisibleContacts((prev) => ({
-      ...prev,
-      [email]: !prev[email],
-    }));
-  };
-
-  const removePortfolioImage = async (url: string) => {
-    try {
-      const imageRef = ref(storage, url);
-      await deleteObject(imageRef);
-      setUser((prev) => prev && { ...prev, portfolioImages: prev.portfolioImages.filter((img) => img !== url) });
-      await handleSaveChanges();
-    } catch (error) {
-      console.error("Error deleting portfolio image:", error);
-    }
-  };
-  
-
-  useEffect(() => {
-    fetchUserData();
-  }, []);
-
-  useEffect(() => {
-    if (user) fetchMatches();
-  }, [user]);
 
   if (loading) return <p>Loading...</p>;
   if (!user) return <p>User not found. Please log in again.</p>;
 
-
   return (
     <div className="container mx-auto px-4 py-10 space-y-8 mt-8">
-       
-      {/* Profile Header */}
       <div className="bg-gradient-to-r from-purple-400 to-blue-500 p-8 rounded-lg shadow-lg text-white flex items-center justify-center flex-col">
         <div className="relative w-40 h-40 mb-4">
           <Image
-          src={user?.profileImage || user?.portfolioImages[0] || "/images/default-profile.png"}
-          alt="Profile"
-          className="rounded-full w-full h-full object-cover border-4 border-white shadow-lg"
-          width={100}
-          height={100}
+            src={user.profileImage || user.portfolioImages[0] || "/images/default-profile.png"}
+            alt="Profile"
+            className="rounded-full w-full h-full object-cover border-4 border-white shadow-lg"
+            width={100}
+            height={100}
           />
-
           <label className="absolute bottom-2 right-2 p-1 bg-white text-gray-700 rounded-full cursor-pointer">
             <FaCamera />
-            <input type="file" onChange={(e) => e.target.files && handleImageUpload(e.target.files[0], `profileImages/${user.email}`, "profileImage")} hidden />
+            <input type="file" onChange={(e) => e.target.files && handleImageUpload(e.target.files[0], `profileImages/${user.email}`)} hidden />
           </label>
         </div>
         <h2 className="text-3xl font-semibold">{user.name || "No name provided"}</h2>
         <p>{user.email || "No email provided"}</p>
-        <button
-        onClick={handleEditClick}
-        className="mt-4 bg-white text-blue-600 font-semibold py-2 px-4 rounded-lg shadow-lg hover:bg-blue-100 transition-all"
-      >
-        <FaEdit className="inline mr-2" /> Edit Profile
-      </button>
-
-      {/* Render Edit Modal */}
-    
+        <button onClick={handleEditToggle} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md shadow-md flex items-center space-x-2">
+          <FaEdit />
+          <span>Edit Profile</span>
+        </button>
       </div>
 
-      {/* Profile Details */}
-      <div className="bg-white p-6 rounded-lg shadow-lg">
-        <h3 className="text-xl font-semibold mb-4 text-gray-700">Personal Details</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {profileFields.map(({ label, key }) => (
-            <div key={key} className="p-4 bg-gray-100 rounded-lg">
-              <h3 className="font-semibold text-gray-700">{label}</h3>
-              {editMode ? (
-              <input
-                className="mt-2 border border-gray-300 p-2 w-full rounded-lg focus:ring focus:ring-indigo-300"
-                value={
-                  user[key] instanceof Date
-                    ? user[key].toISOString().split("T")[0] // Convert Date to string (only date part)
-                    : (user[key] as string | number | readonly string[] | undefined) // Type assertion for other types
-                }
-                onChange={(e) =>
-                  setUser((prev) => prev && { ...prev, [key]: e.target.value })
-                }
-              />
-            ) : (
-              <p className="text-gray-600 mt-2">
-                {user[key] instanceof Date
-                  ? user[key].toLocaleDateString() // Display Date as a formatted string
-                  : user[key] || "Not specified"}
-              </p>
-            )}
+      {updateMessage && <div className="bg-green-500 text-white text-center p-4 rounded-md">{updateMessage}</div>}
 
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Portfolio Images */}
-      <div className="bg-white p-6 rounded-lg shadow-lg">
-        <h3 className="text-xl font-semibold mb-4 text-gray-700">Portfolio Images</h3>
-        <input type="file" multiple onChange={handlePortfolioImagesChange} />
-        <div className="flex space-x-4 mt-4">
-          {user.portfolioImages.map((src, index) => (
-            <div key={index} className="relative">
-              <Image src={src} alt={`Portfolio ${index + 1}`} width={100} height={100} className=" object-cover border-4 rounded-md shadow-md" />
-              <button className="absolute top-1 right-1 text-red-600" onClick={() => removePortfolioImage(src)}>
-                <FaTrash />
+      {isEditing && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg h-3/4 overflow-y-auto">
+            <h2 className="text-xl font-semibold mb-4">Edit Profile</h2>
+            {profileFields.map(({ label, key }) => (
+              <div key={key} className="mb-4">
+                <label className="block text-gray-700">{label}</label>
+                <input
+                  type="text"
+                  value={(editData[key] as string) || ""}
+                  onChange={(e) => handleInputChange(key, e.target.value)}
+                  className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                />
+              </div>
+            ))}
+            <div className="flex justify-end space-x-4 mt-4">
+              <button onClick={handleEditToggle} className="px-4 py-2 bg-gray-400 text-white rounded-md">
+                Cancel
+              </button>
+              <button onClick={handleProfileUpdate} className="px-4 py-2 bg-blue-600 text-white rounded-md">
+                Save Changes
               </button>
             </div>
-          ))}
+          </div>
         </div>
+      )}
+
+      <div className="bg-white p-6 rounded-lg shadow-lg space-y-4">
+        <h2 className="text-2xl font-semibold">Profile Details</h2>
+        <div className="grid grid-cols-2 gap-4">
+        {profileFields.map(({ label, key }) => (
+          <div key={key} className="flex justify-between bg-gray-100 p-3 rounded-md">
+            <span className="font-medium text-gray-700">{label}:</span>
+            <span className="text-gray-900">
+              {user[key] instanceof Date
+                ? user[key].toLocaleDateString() // Format the Date if it's a Date object
+                : user[key] !== undefined
+                ? String(user[key]) // Convert to string if it's not undefined
+                : "Not provided"}
+            </span>
+          </div>
+        ))}
+        </div>
+        <div className="bg-white p-6 rounded-lg shadow-lg space-y-4">
+        <h2 className="text-2xl font-semibold">Portfolio Images</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          {user.portfolioImages && user.portfolioImages.length > 0 ? (
+            user.portfolioImages.map((img, index) => (
+              <Image key={index} src={img} alt={`Portfolio ${index + 1}`} width={150} height={150} className="rounded-md object-cover" />
+            ))
+          ) : (
+            <p>No portfolio images available.</p>
+          )}
+        </div>
+        {/* <label className="block mt-4">
+          <span className="bg-blue-600 text-white px-4 py-2 rounded-md cursor-pointer">Upload New Image</span>
+          <input
+            type="file"
+            onChange={(e) =>
+              e.target.files && handleImageUpload(e.target.files[0], `portfolioImages/${user.email}/${Date.now()}`)
+            }
+            hidden
+          />
+        </label> */}
       </div>
 
-      {/* Matches Section */}
-      <div className="bg-white p-6 rounded-lg shadow-lg">
-  <h3 className="text-xl font-semibold mb-4 text-gray-700">Matching Profiles</h3>
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    {matches
-      .filter((match) => match.email !== user?.email) // Exclude user's profile
-      .map((match) => (
-        <div key={match.email} className="p-4 bg-gradient-to-r from-purple-400 to-blue-500 rounded-lg shadow-md text-white flex flex-col items-center">
-          <Image
-            src={match.profileImage || match.portfolioImages[0] || "/images/default-profile.png"}
-            alt={match.name}
-            width={100}
-            height={100}
-            className="rounded-full shadow-lg"
-          />
-          <h4 className="text-lg font-semibold mt-2">{match.name}</h4>
-          <p>{match.occupation}</p>
-          <p>Height: {match.height}</p>
-          <p>Caste: {match.caste}</p>
-          <button
-          className="mt-4 bg-white text-blue-600 py-1 px-4 rounded-lg shadow-md hover:bg-blue-100 flex items-center justify-center"
-          onClick={() => match.email && toggleContactVisibility(match.email)} // Ensure match.email is not undefined
-        >
-          {match.email && visibleContacts[match.email] ? ( // Check that match.email is not undefined
-            <span>{match.phone || "No contact available"}</span>
-          ) : (
-            <>
-              <FaHeart className="mr-2" /> <span>Show Contact</span>
-            </>
-          )}
-        </button>
-
-
-        </div>
-      ))}
-  </div>
-</div>
-
-
-      {/* Logout Button */}
-      <div className="flex justify-center">
-        <button onClick={logout} className="mt-6 px-6 py-2 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700">
-          Logout
-        </button>
+        <div className="bg-white p-6 rounded-lg shadow-lg space-y-4">
+        <h2 className="text-2xl font-semibold"> Matches</h2>
+        {matches.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {matches.map((match) => (
+              <div key={match.email} className="border p-4 rounded-lg shadow-sm">
+                <Image
+                  src={match.profileImage || "/images/default-profile.png"}
+                  alt="Match Profile"
+                  width={100}
+                  height={100}
+                  className="rounded-full mb-2"
+                />
+                <h3 className="text-xl font-semibold">{match.name}</h3>
+                <p>Age: {Math.floor((new Date().getFullYear() - new Date(match.birthDate).getFullYear()))}</p>
+                <p>Occupation: {match.occupation || "N/A"}</p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p>No matches found. Try adjusting your preferences.</p>
+        )}
+      </div>
       </div>
     </div>
   );
 };
 
-export default Profile; 
-
-
+export default Profile;
