@@ -34,15 +34,15 @@ const Header = () => {
         setNavbar(false);
       }
     };
-  
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   useEffect(() => {
-    router.prefetch('/profile');
-    router.prefetch('/register');
-    router.prefetch('/login');
+    router.prefetch("/profile");
+    router.prefetch("/register");
+    router.prefetch("/login");
   }, [router]);
 
   return (
@@ -93,20 +93,20 @@ const Header = () => {
                 ))}
               </ul>
 
-              <div className="flex flex-col items-center space-y-4 md:flex-row md:space-y-0 md:space-x-4 md:ml-auto ml-10">
+              <div className="flex flex-col items-center space-y-4 md:flex-row md:space-y-0 md:space-x-4 md:ml-auto ml-10 lg:flex lg:space-x-4 lg:visible xl:space-x-4 xl:visible md:hidden">
                 {isAuthenticated ? (
                   <>
                     <Link href="/profile" prefetch>
                       <button
                         onClick={closeNavbar}
-                        className="px-5 py-2 text-center text-white bg-gradient-to-r from-green-500 to-green-700 rounded-md shadow-lg hover:shadow-xl transition-all w-full md:w-auto hidden lg:inline-block"
+                        className="px-5 py-2 text-center text-white bg-gradient-to-r from-green-500 to-green-700 rounded-md shadow-lg hover:shadow-xl transition-all w-full md:w-auto"
                       >
                         My Profile
                       </button>
                     </Link>
                     <button
                       onClick={handleLogout}
-                      className="px-5 py-2 text-center text-white bg-gradient-to-r from-red-500 to-red-700 rounded-md shadow-lg hover:shadow-xl transition-all w-full md:w-auto hidden lg:inline-block"
+                      className="px-5 py-2 text-center text-white bg-gradient-to-r from-red-500 to-red-700 rounded-md shadow-lg hover:shadow-xl transition-all w-full md:w-auto"
                     >
                       Logout
                     </button>
@@ -116,7 +116,7 @@ const Header = () => {
                     <Link href="/register" prefetch>
                       <button
                         onClick={closeNavbar}
-                        className="px-5 py-2 text-center text-white bg-gradient-to-r from-blue-500 to-blue-700 rounded-md shadow-lg hover:shadow-xl transition-all w-full md:w-auto hidden lg:inline-block"
+                        className="px-5 py-2 text-center text-white bg-gradient-to-r from-blue-500 to-blue-700 rounded-md shadow-lg hover:shadow-xl transition-all w-full md:w-auto"
                       >
                         Register
                       </button>
@@ -124,7 +124,7 @@ const Header = () => {
                     <Link href="/login" prefetch>
                       <button
                         onClick={closeNavbar}
-                        className="px-5 py-2 text-center text-white bg-gradient-to-r from-gray-500 to-gray-700 rounded-md shadow-lg hover:shadow-xl transition-all w-full md:w-auto hidden lg:inline-block"
+                        className="px-5 py-2 text-center text-white bg-gradient-to-r from-gray-500 to-gray-700 rounded-md shadow-lg hover:shadow-xl transition-all w-full md:w-auto"
                       >
                         Login
                       </button>
