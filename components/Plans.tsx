@@ -12,7 +12,7 @@ const Pricing = () => {
         "Profile Boosting (Limited)",
       ],
       buttonColor: "bg-blue-500 hover:bg-blue-600",
-      validity: "1 year"
+      validity: "1 year",
     },
     {
       name: "Pro",
@@ -24,7 +24,7 @@ const Pricing = () => {
         "Matchmaking Consultation",
       ],
       buttonColor: "bg-green-500 hover:bg-green-600",
-      validity: '3 year'
+      validity: "3 year",
     },
     {
       name: "Pro Max",
@@ -37,7 +37,7 @@ const Pricing = () => {
         "VIP Profile Badge",
       ],
       buttonColor: "bg-purple-500 hover:bg-purple-600",
-      validity: 'Lifetime'
+      validity: "Lifetime",
     },
   ];
 
@@ -58,8 +58,9 @@ const Pricing = () => {
                 </h3>
                 <p className="text-5xl font-extrabold text-black-700 dark:text-white">
                   {plan.price}
+                  <span className="text-5xl"> /-</span>
                 </p>
-                <span className="text-lg font-normal text-gray-500 mb-6">/For {plan.validity}</span>
+                <span className="text-lg font-normal text-gray-500 mb-6">(For {plan.validity})</span>
                 <ul className="space-y-4 mb-8">
                   {plan.features.map((feature, index) => (
                     <li
