@@ -157,8 +157,7 @@ const Contact: React.FC = () => {
                       required
                       type="text"
                       className="border-b border-gray-300 bg-transparent py-3 focus:border-blue-500 outline-none transition-all dark:border-gray-700 dark:focus:border-blue-300"
-                      onFocus={(e) => (e.target.type = "date")}
-                      onBlur={(e) => (e.target.type = "text")}
+                      
                     />
 
                   <input
