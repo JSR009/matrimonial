@@ -8,7 +8,7 @@ import { collection, addDoc } from "firebase/firestore"; // Firestore methods
 interface FormData {
   fullName: string;
   email: string;
-  age: string;
+  dob: string;
   phoneNumber: string;
   city: string;
   gender: string;
@@ -38,7 +38,7 @@ const Contact: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
     email: "",
-    age: "",
+    dob: "",
     phoneNumber: "",
     city: "",
     gender: "",
@@ -86,7 +86,7 @@ const Contact: React.FC = () => {
       setFormData({
         fullName: "",
         email: "",
-        age: "",
+        dob: "",
         phoneNumber: "",
         city: "",
         gender: "",
@@ -150,11 +150,11 @@ const Contact: React.FC = () => {
                 </div>
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 mb-6">
                   <input
-                    type="text"
-                    name="age"
-                    value={formData.age}
+                    type="date"
+                    name="dob"
+                    value={formData.dob}
                     onChange={handleChange}
-                    placeholder="Age"
+                    placeholder="Date of Birth"
                     required
                     className="border-b border-gray-300 bg-transparent py-3 focus:border-blue-500 outline-none transition-all dark:border-gray-700 dark:focus:border-blue-300"
                   />
@@ -192,15 +192,13 @@ const Contact: React.FC = () => {
                   </select>
                 </div>
                 <div className="mb-6">
-               
-                  <input 
-                  type="text"
-                  name="message"
-                  value={formData.fullName}
-                  onChange={handleChange}
-                  placeholder="Your Message"
-                  required
-                  className="w-full border-b border-gray-300 bg-transparent py-3 focus:border-blue-500 outline-none transition-all dark:border-gray-700 dark:focus:border-blue-300"
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder="Your Message"
+                    required
+                    className="w-full border-b border-gray-300 bg-transparent py-3 focus:border-blue-500 outline-none transition-all dark:border-gray-700 dark:focus:border-blue-300"
                   />
                 </div>
                 <div className="mb-6">
@@ -240,43 +238,26 @@ const Contact: React.FC = () => {
                 Find Us
               </h2>
 
-              <div className="mb-6">
-                <h3 className="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
-                  <FaMapMarkerAlt className="inline-block mr-2 text-blue-600" /> Our Location
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                Office no. 217 2nd floor, jain tower 1, District Center, Janakpuri, New Delhi 110058
+              <div className="flex flex-col space-y-6 text-gray-600 dark:text-gray-300">
+                <div className="flex items-center">
+                  <FaMapMarkerAlt className="mr-4 text-2xl text-blue-500" />
+                  <span>Office no. 217 2nd floor, jain tower 1, District Center, Janakpuri, New Delhi 110058
 
-Timing: Monday to Saturday: 10 AM - 6 PM (Closed on govt. holiday)
-                </p>
-              </div>
-
-              <div className="mb-6">
-                <h3 className="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
-                  <FaEnvelope className="inline-block mr-2 text-blue-600" /> Email Address
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  <a href="mailto:yourmail@domainname.com" className="hover:text-blue-500">
-                    milanmunch20@gmail.com
-                  </a>
-                </p>
-              </div>
-
-              <div>
-                <h3 className="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
-                  <FaPhoneAlt className="inline-block mr-2 text-blue-600" /> Phone Number
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  <a href="011-49054121" className="hover:text-blue-500">
-                  011-49054121
-                  </a>
-                </p>
+Timing: Monday to Saturday: 10 AM - 6 PM (Closed on govt. holiday)</span>
+                </div>
+                <div className="flex items-center">
+                  <FaEnvelope className="mr-4 text-2xl text-blue-500" />
+                  <span>milanmunch20@gmail.com</span>
+                </div>
+                <div className="flex items-center">
+                  <FaPhoneAlt className="mr-4 text-2xl text-blue-500" />
+                  <span>+1 (123) 456-7890</span>
+                </div>
               </div>
             </motion.div>
           </div>
         </div>
       </section>
-      {/* Contact Section End */}
     </>
   );
 };

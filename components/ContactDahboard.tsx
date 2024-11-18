@@ -16,7 +16,7 @@ interface FormData {
   id?: string;
   fullName: string;
   email: string;
-  age: string;
+  dob: string; // Changed from age to dob
   phoneNumber: string;
   city: string;
   gender: string;
@@ -29,6 +29,8 @@ const ContactAdminDashboard: React.FC = () => {
   const [currentData, setCurrentData] = useState<FormData | null>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -48,7 +50,7 @@ const ContactAdminDashboard: React.FC = () => {
     setCurrentData({
       fullName: "",
       email: "",
-      age: "",
+      dob: "",
       phoneNumber: "",
       city: "",
       gender: "",
@@ -66,15 +68,26 @@ const ContactAdminDashboard: React.FC = () => {
     setShowModal(true);
   };
 
+  // Open confirmation modal for deletion
+  const handleDeleteConfirmation = (id: string) => {
+    setDeleteId(id);
+    setShowDeleteModal(true);
+  };
+
   // Delete entry from Firestore
-  const handleDelete = async (id: string) => {
+  const handleDelete = async () => {
+    if (!deleteId) return;
+
     try {
-      await deleteDoc(doc(db, "matrimonialContacts", id));
-      setFormDataList(formDataList.filter((data) => data.id !== id));
+      await deleteDoc(doc(db, "matrimonialContacts", deleteId));
+      setFormDataList(formDataList.filter((data) => data.id !== deleteId));
       setSuccessMessage("Entry deleted successfully.");
     } catch (error) {
       console.error("Error deleting entry:", error);
       setErrorMessage("Failed to delete entry.");
+    } finally {
+      setDeleteId(null);
+      setShowDeleteModal(false);
     }
   };
 
@@ -102,7 +115,7 @@ const ContactAdminDashboard: React.FC = () => {
 
   return (
     <div className="px-4 py-10 mt-20 ml-7">
-      <div className=" items-center mb-6">
+      <div className="items-center mb-6">
         <h1 className="text-2xl font-bold text-center mb-4">Numerology Data</h1>
         <button
           onClick={handleNewEntry}
@@ -120,9 +133,10 @@ const ContactAdminDashboard: React.FC = () => {
         <table className="min-w-full bg-white dark:bg-gray-900 rounded-lg shadow-lg">
           <thead>
             <tr>
+              <th className="px-6 py-3">#</th>
               <th className="px-6 py-3">Full Name</th>
               <th className="px-6 py-3">Email</th>
-              <th className="px-6 py-3">Age</th>
+              <th className="px-6 py-3">Date of Birth</th>
               <th className="px-6 py-3">Phone Number</th>
               <th className="px-6 py-3">City</th>
               <th className="px-6 py-3">Gender</th>
@@ -132,11 +146,12 @@ const ContactAdminDashboard: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {formDataList.map((data) => (
+            {formDataList.map((data, index) => (
               <tr key={data.id} className="border-b">
+                <td className="px-6 py-3">{index + 1}</td>
                 <td className="px-6 py-3">{data.fullName}</td>
                 <td className="px-6 py-3">{data.email}</td>
-                <td className="px-6 py-3">{data.age}</td>
+                <td className="px-6 py-3">{data.dob}</td>
                 <td className="px-6 py-3">{data.phoneNumber}</td>
                 <td className="px-6 py-3">{data.city}</td>
                 <td className="px-6 py-3">{data.gender}</td>
@@ -150,8 +165,8 @@ const ContactAdminDashboard: React.FC = () => {
                     Edit
                   </button>
                   <button
-  onClick={() => data.id && handleDelete(data.id)}
-   className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
+                    onClick={() => handleDeleteConfirmation(data.id!)}
+                    className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600"
                   >
                     Delete
                   </button>
@@ -169,6 +184,30 @@ const ContactAdminDashboard: React.FC = () => {
           onClose={() => setShowModal(false)}
           onSave={handleModalSubmit}
         />
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 p-4">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
+            <h2 className="text-lg font-bold mb-4">Confirm Deletion</h2>
+            <p className="mb-4">Are you sure you want to delete this entry?</p>
+            <div className="flex justify-end space-x-2">
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

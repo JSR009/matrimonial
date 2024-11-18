@@ -1,11 +1,10 @@
 import { useState } from "react";
 
-
 // Define a custom interface for the form data
 interface CustomFormData {
   fullName: string;
   email: string;
-  age: string;
+  dob: string; // Changed from age to dob
   phoneNumber: string;
   city: string;
   gender: string;
@@ -24,7 +23,7 @@ const Modal: React.FC<ModalProps> = ({ data, onClose, onSave }) => {
     data || {
       fullName: "",
       email: "",
-      age: "",
+      dob: "", // Initialized dob field
       phoneNumber: "",
       city: "",
       gender: "",
@@ -41,11 +40,12 @@ const Modal: React.FC<ModalProps> = ({ data, onClose, onSave }) => {
   const handleSubmit = () => {
     onSave(formData);
   };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 p-4 mt-10">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md max-h-[85vh] overflow-y-auto mt-8">
         <h2 className="text-xl font-semibold mb-4 text-gray-700 text-center">{data ? "Edit Entry" : "New Entry"}</h2>
-        
+
         <input
           name="fullName"
           value={formData.fullName}
@@ -62,10 +62,11 @@ const Modal: React.FC<ModalProps> = ({ data, onClose, onSave }) => {
           className="border border-gray-300 p-3 mb-3 w-full rounded-md focus:ring-2 focus:ring-indigo-500"
         />
         <input
-          name="age"
-          value={formData.age}
+          name="dob"
+          type="date" // Changed input type to date for dob
+          value={formData.dob}
           onChange={handleChange}
-          placeholder="Age"
+          placeholder="Date of Birth"
           className="border border-gray-300 p-3 mb-3 w-full rounded-md focus:ring-2 focus:ring-indigo-500"
         />
         <input
