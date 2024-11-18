@@ -149,15 +149,18 @@ const Contact: React.FC = () => {
                   />
                 </div>
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 mb-6">
-                  <input
-                    type="date"
-                    name="dob"
-                    value={formData.dob}
-                    onChange={handleChange}
-                    placeholder="Date of Birth"
-                    required
-                    className="border-b border-gray-300 bg-transparent py-3 focus:border-blue-500 outline-none transition-all dark:border-gray-700 dark:focus:border-blue-300"
-                  />
+                <input
+                      name="dob"
+                      value={formData.dob}
+                      onChange={handleChange}
+                      placeholder="Date of Birth (YYYY-MM-DD)"
+                      required
+                      type="text"
+                      className="border-b border-gray-300 bg-transparent py-3 focus:border-blue-500 outline-none transition-all dark:border-gray-700 dark:focus:border-blue-300"
+                      onFocus={(e) => (e.target.type = "date")}
+                      onBlur={(e) => (e.target.type = "text")}
+                    />
+
                   <input
                     type="text"
                     name="phoneNumber"
