@@ -253,7 +253,7 @@ Timing: Monday to Saturday: 10 AM - 6 PM (Closed on govt. holiday)</span>
                 </div>
                 <div className="flex items-center">
                   <FaPhoneAlt className="mr-4 text-2xl text-blue-500" />
-                  <span>+1 (123) 456-7890</span>
+                  <span>+91 1149065444</span>
                 </div>
               </div>
             </motion.div>
